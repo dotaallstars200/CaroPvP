@@ -25,8 +25,9 @@ public class CellPosition {
 
     @Override
     public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof CellPosition))
+            return false;
         CellPosition another = (CellPosition) obj;
-        assert another != null;
         return another.column == column && another.row == row;
     }
 

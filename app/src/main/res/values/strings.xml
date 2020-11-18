@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">XO GAMES</string>
+    <string name="app_name">GOMOKU PvP</string>
+    <string name="play_with_bot">Play with bot</string>
+    <string name="play_with_friend">Play with friend</string>
+    <string name="history">History</string>
+    <string name="exit">Exit</string>
 </resources>

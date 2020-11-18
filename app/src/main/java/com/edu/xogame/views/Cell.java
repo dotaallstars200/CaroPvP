@@ -35,7 +35,8 @@ public class Cell extends androidx.appcompat.widget.AppCompatImageView implement
 
     @Override
     public void onClick(View v) {
-        board.checkCell(this);
+        if (board.getGame().isMyTurn())
+            board.checkCell(this);
     }
 
     @Override

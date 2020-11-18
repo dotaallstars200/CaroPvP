@@ -6,8 +6,9 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.edu.xogame.classes.Game;
+import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.datastructure.CellPosition;
-import com.edu.xogame.GamePlayActivity;
 
 import java.util.HashMap;
 
@@ -15,17 +16,20 @@ public class Board  {
 
     public static final int NUMBER_COLUMNS = 50;
     public static final int NUMBER_ROWS = 50;
+
     private final TableLayout tableLayout;
     private final int[][] trackTable;
-    private boolean isTurnO = true;
     private final HashMap<Integer, Cell> checkedCells;
+    private final HashMap<Integer, Cell> cells;
+    private final Game game;
 
-    public Board(Context context) {
+    public Board(Context context, Game game) {
         trackTable = new int[NUMBER_ROWS][NUMBER_COLUMNS];
         tableLayout = new TableLayout(context);
         checkedCells = new HashMap<>();
+        cells = new HashMap<>();
         createBoard(context);
-
+        this.game = game;
     }
 
     private void createBoard(Context context) {
@@ -41,6 +45,7 @@ public class Board  {
 
             for (int j = 0; j < NUMBER_COLUMNS; j++) {
                 Cell cell = new Cell(context, this, new CellPosition(i, j));
+                cells.put(cell.hashCode(), cell);
                 cell.setLayoutParams(rowParams);
                 tr.addView(cell);
                 trackTable[i][j] = 0;
@@ -58,6 +63,12 @@ public class Board  {
         return checkedCells;
     }
 
+    public Cell getCell(CellPosition cellPosition) { return cells.get(cellPosition.hashCode()); }
+
+    public Game getGame() {
+        return game;
+    }
+
     public int getTotalCells() { return NUMBER_COLUMNS * NUMBER_ROWS; }
 
     public TableLayout getTableLayout() {
@@ -73,7 +84,7 @@ public class Board  {
             return;
 
         // handle turn
-        if (isTurnO) {
+        if (game.isTurnO()) {
             trackTable[rowPos][colPos] =  1;
             cell.check(Cell.O_IMAGE);
         } else {
@@ -84,11 +95,16 @@ public class Board  {
 
         // check if the game is draw
         if (checkedCells.size() == getTotalCells())
-            Log.e("DRAW", "DRAW");
+            getGame().endGame("DRAW!!!", true);
 
-        boolean gameResult = GamePlayActivity.checkWin(cell.getCellPosition(), trackTable[rowPos][colPos], trackTable);
-        if (gameResult)
-            Log.e("WIN", "WIN");
-        isTurnO = !isTurnO;
+        boolean gameResult = game.checkWin(cell.getCellPosition(), trackTable[rowPos][colPos], trackTable);
+        if (gameResult) {
+            String side = game.isMyTurn() ? "YOU" : "OPPONENT";
+            getGame().endGame(side + " WIN THE GAME!!!", true);
+        }
+
+        game.changeTurn();
     }
+
+
 }
