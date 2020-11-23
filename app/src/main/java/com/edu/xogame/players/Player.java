@@ -9,4 +9,6 @@ public abstract class Player {
     public Player(Board board) {
         this.board = board;
     }
+
+    public void makeMove() { }
 }

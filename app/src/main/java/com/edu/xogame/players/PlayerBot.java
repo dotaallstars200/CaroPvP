@@ -51,7 +51,8 @@ public class PlayerBot extends Player {
         return move;
     }
 
-    public void checkCell() {
+    @Override
+    public void makeMove() {
         CellPosition cellPosition = thinkMoves();
         board.checkCell(board.getCell(cellPosition));
     }

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.edu.xogame.classes.Game;
+import com.edu.xogame.Game;
 import com.edu.xogame.R;
 import com.edu.xogame.players.PlayerBot;
 

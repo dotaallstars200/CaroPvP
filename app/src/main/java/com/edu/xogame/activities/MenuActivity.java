@@ -5,7 +5,6 @@ import com.edu.xogame.R;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity {
@@ -26,6 +25,11 @@ public class MenuActivity extends AppCompatActivity {
             Intent intent = new Intent(this, GamePlayActivity.class);
 
             intent.putExtra("PlayType", "Bot");
+            startActivity(intent);
+        });
+
+        btnPlayWithFriend.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MultiPlayerActivity.class);
             startActivity(intent);
         });
 

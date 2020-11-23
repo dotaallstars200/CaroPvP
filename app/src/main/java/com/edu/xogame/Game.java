@@ -1,4 +1,4 @@
-package com.edu.xogame.classes;
+package com.edu.xogame;
 
 import android.app.Activity;
 import android.widget.HorizontalScrollView;
@@ -31,7 +31,7 @@ public class Game {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
         if (!goFirst)
-            ((PlayerBot) opponent).checkCell();
+            ((PlayerBot) opponent).makeMove();
     }
 
     public void endGame(String result, boolean showDialog) {
@@ -44,8 +44,10 @@ public class Game {
             builder.setMessage("Do you want to play a new game?");
             // Nút Ok
             builder.setPositiveButton("YES", (dialog, which) -> {
+                removeBoardFromActivity();
                 boolean playWithBot = opponent instanceof PlayerBot;
                 ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+
             });
 
             //Nút Cancel
@@ -55,7 +57,9 @@ public class Game {
             //Hiển thị
             alertDialog.show();
         }
-
+    }
+    
+    private void removeBoardFromActivity() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.removeView(board.getTableLayout());
     }
@@ -80,7 +84,7 @@ public class Game {
         isTurnO = !isTurnO;
 
         if (!isMyTurn() && opponent instanceof PlayerBot) {
-            ((PlayerBot) opponent).checkCell();
+            ((PlayerBot) opponent).makeMove();
         }
     }
 

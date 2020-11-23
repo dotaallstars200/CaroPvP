@@ -1,13 +1,11 @@
 package com.edu.xogame.views;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.edu.xogame.classes.Game;
-import com.edu.xogame.activities.GamePlayActivity;
+import com.edu.xogame.Game;
 import com.edu.xogame.datastructure.CellPosition;
 
 import java.util.HashMap;
