@@ -74,6 +74,7 @@ public class Board  {
     }
 
     public void checkCell(Cell cell) {
+
         int rowPos = cell.getCellPosition().row;
         int colPos = cell.getCellPosition().column;
 

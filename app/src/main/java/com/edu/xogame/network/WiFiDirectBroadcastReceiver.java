@@ -1,10 +1,11 @@
-package com.edu.xogame;
+package com.edu.xogame.network;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
@@ -58,14 +59,25 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                Log.e("FUCK", "LOLLLL");
+
                 manager.requestPeers(channel, activity.peerListListener);
             }
             // Call WifiP2pManager.requestPeers() to get a list of current peers
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
+            if (manager == null) {
+                return;
+            }
+
+            NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            if (networkInfo.isConnected()) {
+                manager.requestConnectionInfo(channel, activity.connectionInfoListener);
+            } else {
+                Toast.makeText(context, "Device disconnected", Toast.LENGTH_SHORT).show();
+            }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
         }
     }
+
 }

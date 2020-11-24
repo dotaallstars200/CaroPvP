@@ -1,11 +1,13 @@
 package com.edu.xogame.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.R;
+import com.edu.xogame.players.RealPlayer;
 
 public class Cell extends androidx.appcompat.widget.AppCompatImageView implements View.OnClickListener {
 
@@ -35,8 +37,13 @@ public class Cell extends androidx.appcompat.widget.AppCompatImageView implement
 
     @Override
     public void onClick(View v) {
-        if (board.getGame().isMyTurn())
+        if (board.getGame().isMyTurn()) {
             board.checkCell(this);
+            if (board.getGame().getOpponent() instanceof RealPlayer) {
+                Thread thread = new Thread(() -> ((RealPlayer) board.getGame().getOpponent()).sendMove(cellPosition));
+                thread.start();
+            }
+        }
     }
 
     @Override

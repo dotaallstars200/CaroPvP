@@ -27,35 +27,34 @@ public class Game {
         board = new Board(activity.getApplicationContext(), this);
     }
 
+    public Player getOpponent() {
+        return opponent;
+    }
+
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
-        if (!goFirst)
-            ((PlayerBot) opponent).makeMove();
+        if (opponent instanceof PlayerBot) {
+            if (!goFirst)
+                opponent.makeMove();
+        }
+
     }
 
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
-            //Tạo đối tượng
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            //Thiết lập tiêu đề
-            builder.setTitle(result);
-            builder.setMessage("Do you want to play a new game?");
-            // Nút Ok
-            builder.setPositiveButton("YES", (dialog, which) -> {
+            IFunction positiveFunc = () -> {
                 removeBoardFromActivity();
-                boolean playWithBot = opponent instanceof PlayerBot;
-                ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+                ((GamePlayActivity)(activity)).newGame(!goFirst, opponent);
+            };
 
-            });
+            IFunction negativeFunc = activity::finish;
 
-            //Nút Cancel
-            builder.setNegativeButton("NO", (dialog, id) -> activity.finish());
-            //Tạo dialog
-            AlertDialog alertDialog = builder.create();
-            //Hiển thị
-            alertDialog.show();
+            Utilities.createDialog(result, "Do you want to play a new game?",
+                    "YES", "NO", activity, positiveFunc, negativeFunc);
+        } else {
+            removeBoardFromActivity();
         }
     }
     
@@ -84,7 +83,7 @@ public class Game {
         isTurnO = !isTurnO;
 
         if (!isMyTurn() && opponent instanceof PlayerBot) {
-            ((PlayerBot) opponent).makeMove();
+            opponent.makeMove();
         }
     }
 

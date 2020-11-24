@@ -13,6 +13,9 @@ public class MenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        MultiPlayerActivity.disconnect(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 

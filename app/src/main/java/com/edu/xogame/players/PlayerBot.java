@@ -1,17 +1,16 @@
 package com.edu.xogame.players;
 
+import android.os.Handler;
+
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.views.Board;
 
 public class PlayerBot extends Player {
 
-    private final Board board;
-    private static final int DEPTH = 1;
-    private final CellPosition DEFAULT_MOVE = new CellPosition(5, 5);
+    private final CellPosition DEFAULT_MOVE = new CellPosition(7, 7);
 
-    public PlayerBot(Board board) {
-        super(board);
-        this.board = board;
+    public PlayerBot(Handler handler) {
+        super(handler);
     }
 
     private CellPosition thinkMoves() {
@@ -53,12 +52,10 @@ public class PlayerBot extends Player {
 
     @Override
     public void makeMove() {
-        CellPosition cellPosition = thinkMoves();
-        board.checkCell(board.getCell(cellPosition));
-    }
-
-    public Board getBoard() {
-        return board;
+        new Thread(() -> {
+            CellPosition cellPosition = thinkMoves();
+            handler.post(() -> board.checkCell(board.getCell(cellPosition)));
+        }).start();
     }
 
 
