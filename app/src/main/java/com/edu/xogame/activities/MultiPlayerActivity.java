@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -54,6 +55,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_player);
 
+        resetWifi();
         listView = findViewById(R.id.listView);
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -67,6 +69,12 @@ public class MultiPlayerActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.button);
         button.setOnClickListener(v -> discoverPlayers());
+    }
+
+    private void resetWifi() {
+        WifiManager wifiManager = (WifiManager)this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(false);
+        wifiManager.setWifiEnabled(true);
     }
 
     public WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {

@@ -1,17 +1,12 @@
 package com.edu.xogame;
 
 import android.content.Context;
-
 import androidx.appcompat.app.AlertDialog;
-
 import com.edu.xogame.network.Client;
 import com.edu.xogame.network.Host;
-import com.edu.xogame.players.Player;
 
 
 public class Utilities {
-
-    public static final int MESSAGE_MOVE = 1;
     public static Host HOST;
     public static Client CLIENT;
 
