@@ -22,10 +22,10 @@ public class Utilities {
         builder.setTitle(title);
         builder.setMessage(message);
         // Nút Ok
-        builder.setPositiveButton(positiveText, (dialog, which) -> positiveFunc.execute());
+        if (positiveText != null) builder.setPositiveButton(positiveText, (dialog, which) -> positiveFunc.execute());
 
         //Nút Cancel
-        builder.setNegativeButton(negativeText, (dialog, id) -> negativeFunc.execute());
+        if (negativeText != null) builder.setNegativeButton(negativeText, (dialog, id) -> negativeFunc.execute());
         //Tạo dialog
         AlertDialog alertDialog = builder.create();
         alertDialog.setCancelable(false);
