@@ -2,16 +2,14 @@ package com.edu.xogame.players;
 
 import android.os.Handler;
 
+import com.edu.xogame.Utilities;
 import com.edu.xogame.views.Board;
 
 public abstract class Player {
 
     protected Board board;
-    protected Handler handler;
+    protected Handler handler = Utilities.HANDLER;
 
-    public Player(Handler handler) {
-        this.handler = handler;
-    }
 
     public Board getBoard() {
         return board;
@@ -21,9 +19,6 @@ public abstract class Player {
         this.board = board;
     }
 
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
 
     public void makeMove() { }
 }

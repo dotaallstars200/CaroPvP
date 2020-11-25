@@ -1,6 +1,8 @@
 package com.edu.xogame;
 
 import android.content.Context;
+import android.os.Handler;
+
 import androidx.appcompat.app.AlertDialog;
 import com.edu.xogame.network.Client;
 import com.edu.xogame.network.Host;
@@ -9,6 +11,9 @@ import com.edu.xogame.network.Host;
 public class Utilities {
     public static Host HOST;
     public static Client CLIENT;
+    public static final int CANCEL_DIALOG = 0;
+    public static final Handler HANDLER = new Handler();
+
 
     public static void createDialog(String title, String message , String positiveText, String negativeText, Context context, IFunction positiveFunc, IFunction negativeFunc) {
         //Tạo đối tượng
@@ -26,5 +31,6 @@ public class Utilities {
         alertDialog.setCancelable(false);
         //Hiển thị
         alertDialog.show();
+
     }
 }
