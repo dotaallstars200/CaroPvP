@@ -1,7 +1,11 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.widget.HorizontalScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -21,9 +25,11 @@ public class Game {
     private boolean isTurnO = true; // O always goes first
     private final Activity activity;
 
+
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
+
         board = new Board(activity.getApplicationContext(), this);
     }
 
@@ -33,20 +39,28 @@ public class Game {
         if (!goFirst)
             ((PlayerBot) opponent).makeMove();
     }
-
+    public void remake(){
+        removeBoardFromActivity();
+        boolean playWithBot = opponent instanceof PlayerBot;
+        ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+    }
+    public void undo(){
+        board.uncheckCell();
+    }
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
             //Tạo đối tượng
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             //Thiết lập tiêu đề
-            builder.setTitle(result);
+            builder.setTitle(result+ " WIN THE GAME!!!");
             builder.setMessage("Do you want to play a new game?");
             // Nút Ok
             builder.setPositiveButton("YES", (dialog, which) -> {
                 removeBoardFromActivity();
                 boolean playWithBot = opponent instanceof PlayerBot;
                 ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+                ((GamePlayActivity)(activity)).updatePoint(result);
 
             });
 
@@ -84,8 +98,11 @@ public class Game {
         isTurnO = !isTurnO;
 
         if (!isMyTurn() && opponent instanceof PlayerBot) {
+
+
             ((PlayerBot) opponent).makeMove();
         }
+
     }
 
     public boolean checkWin(CellPosition anchor, int sideChecking, int[][] trackTable) {

@@ -1,8 +1,10 @@
 package com.edu.xogame.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.R;
@@ -14,7 +16,6 @@ public class Cell extends androidx.appcompat.widget.AppCompatImageView implement
     public static final int O_IMAGE = R.drawable.cell_o;
     private final CellPosition cellPosition;
     private final Board board;
-
     public Cell(Context context, Board board, CellPosition cellPosition) {
         super(context);
         this.cellPosition = cellPosition;
@@ -26,9 +27,13 @@ public class Cell extends androidx.appcompat.widget.AppCompatImageView implement
     }
 
     public void check(int status_image) {
+
         setImageResource(status_image);
     }
+    public void uncheck() {
 
+        setImageResource(EMPTY_IMAGE);
+    }
     public CellPosition getCellPosition() {
         return cellPosition;
     }
