@@ -1,11 +1,10 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ProgressBar;
 
-import androidx.appcompat.app.AlertDialog;
-
-import com.edu.xogame.R;
 import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
@@ -20,11 +19,21 @@ public class Game {
     private final Board board;
     private boolean isTurnO = true; // O always goes first
     private final Activity activity;
+    ProgressBar progressBar;
+    private static final int MAX_PROGRESS = 100;
+    private static final int PROGRESS_STEP = 1;
+    int sumProgress = 0;
+    int maxValue = 60;
+    public boolean isRunning;
+    Thread myBackgroundThread;
 
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
         board = new Board(activity.getApplicationContext(), this);
+        isRunning = true;
+        progressBar = activity.findViewById(R.id.progressBar);
+        isRunning = true;
     }
 
     public Player getOpponent() {
@@ -34,7 +43,7 @@ public class Game {
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
-        ((GamePlayActivity) (activity)).startTime();
+        startTimer();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
                 opponent.makeMove();
@@ -64,6 +73,7 @@ public class Game {
         } else {
             removeBoardFromActivity();
         }
+        isRunning = false;
     }
     
     private void removeBoardFromActivity() {
@@ -89,7 +99,7 @@ public class Game {
 
     public void changeTurn() {
         isTurnO = !isTurnO;
-        ((GamePlayActivity) (activity)).startTime();
+        sumProgress = 0;
         if (!isMyTurn() && opponent instanceof PlayerBot) {
             opponent.makeMove();
         }
@@ -166,4 +176,51 @@ public class Game {
     public enum Direction {
         TOP, BOT, LEFT, RIGHT, LEFT_TOP, RIGHT_BOT, LEFT_BOT, RIGHT_TOP,
     }
+
+    public void startTimer() {
+        if (!isRunning) {
+            return;
+        }
+        sumProgress = 0;
+        progressBar.setMax(MAX_PROGRESS);
+        progressBar.setVisibility(View.VISIBLE);
+        myBackgroundThread = new Thread(backgroundTask, "bgTask");
+        myBackgroundThread.start();
+    }
+
+    private final Runnable foregroundRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
+                sumProgress += PROGRESS_STEP;
+
+                if (sumProgress >= maxValue) {
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    if (isMyTurn()) {
+                        endGame("Đối phương đã thắng",true);
+                    } else {
+                        endGame("Bạn đã thắng",true);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private final Runnable backgroundTask = () -> {
+        try {
+            for (int i = 0; i < maxValue; i++) {
+                if (!isRunning)
+                    return;
+                Thread.sleep(1000);
+                Utilities.HANDLER.post(foregroundRunnable);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    };
 }
