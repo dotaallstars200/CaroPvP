@@ -1,6 +1,5 @@
 package com.edu.xogame.network;
 
-import android.os.Handler;
 
 import com.edu.xogame.IFunction;
 import com.edu.xogame.players.RealPlayer;

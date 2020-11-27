@@ -44,15 +44,22 @@ public class Game {
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
-            IFunction positiveFunc = () -> {
-                removeBoardFromActivity();
-                ((GamePlayActivity)(activity)).newGame(!goFirst, opponent);
-            };
 
-            IFunction negativeFunc = activity::finish;
+            if (opponent instanceof PlayerBot) {
+                IFunction positiveFunc = () -> {
+                    removeBoardFromActivity();
+                    ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
+                };
 
-            Utilities.createDialog(result, "Do you want to play a new game?",
-                    "YES", "NO", activity, positiveFunc, negativeFunc);
+                IFunction negativeFunc = activity::finish;
+
+                Utilities.createDialog(result, "Do you want to play a new game?",
+                        "YES", "NO", activity, positiveFunc, negativeFunc);
+            } else {
+                IFunction negativeFunc = activity::finish;
+                Utilities.createDialog(result, "Bấm ok để thoát!",
+                        null, "OK", activity, null, negativeFunc);
+            }
         } else {
             removeBoardFromActivity();
         }

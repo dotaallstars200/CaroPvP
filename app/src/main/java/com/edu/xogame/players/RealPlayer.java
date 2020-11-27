@@ -21,7 +21,6 @@ public class RealPlayer extends Player implements Runnable {
     private CellPosition moveToMake;
 
     public RealPlayer(Socket socket) {
-        super(null);
         this.socket = socket;
 
         try {
@@ -36,7 +35,6 @@ public class RealPlayer extends Player implements Runnable {
         try {
 
             outputStream.writeUTF("MOVE/" + cellPosition.row + "," + cellPosition.column);
-            outputStream.writeUTF("\n");
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +73,6 @@ public class RealPlayer extends Player implements Runnable {
 
     @Override
     public void makeMove() {
-        Log.e("TEST", moveToMake.toString());
         handler.post(() -> board.checkCell(board.getCell(moveToMake)));
 
     }

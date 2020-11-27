@@ -1,19 +1,19 @@
 package com.edu.xogame;
 
 import android.content.Context;
+import android.os.Handler;
 
 import androidx.appcompat.app.AlertDialog;
-
 import com.edu.xogame.network.Client;
 import com.edu.xogame.network.Host;
-import com.edu.xogame.players.Player;
 
 
 public class Utilities {
-
-    public static final int MESSAGE_MOVE = 1;
     public static Host HOST;
     public static Client CLIENT;
+    public static final int CANCEL_DIALOG = 0;
+    public static final Handler HANDLER = new Handler();
+
 
     public static void createDialog(String title, String message , String positiveText, String negativeText, Context context, IFunction positiveFunc, IFunction negativeFunc) {
         //Tạo đối tượng
@@ -22,14 +22,15 @@ public class Utilities {
         builder.setTitle(title);
         builder.setMessage(message);
         // Nút Ok
-        builder.setPositiveButton(positiveText, (dialog, which) -> positiveFunc.execute());
+        if (positiveText != null) builder.setPositiveButton(positiveText, (dialog, which) -> positiveFunc.execute());
 
         //Nút Cancel
-        builder.setNegativeButton(negativeText, (dialog, id) -> negativeFunc.execute());
+        if (negativeText != null) builder.setNegativeButton(negativeText, (dialog, id) -> negativeFunc.execute());
         //Tạo dialog
         AlertDialog alertDialog = builder.create();
         alertDialog.setCancelable(false);
         //Hiển thị
         alertDialog.show();
+
     }
 }

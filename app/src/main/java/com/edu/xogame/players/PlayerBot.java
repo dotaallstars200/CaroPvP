@@ -9,10 +9,6 @@ public class PlayerBot extends Player {
 
     private final CellPosition DEFAULT_MOVE = new CellPosition(7, 7);
 
-    public PlayerBot(Handler handler) {
-        super(handler);
-    }
-
     private CellPosition thinkMoves() {
         int maxPoint = 0;
         int defensePoint = 0;

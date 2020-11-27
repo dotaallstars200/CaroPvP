@@ -18,19 +18,21 @@ import com.edu.xogame.players.RealPlayer;
 public class GamePlayActivity extends AppCompatActivity {
 
     private Game game;
-    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+
         Intent intent = getIntent();
         String playingType = intent.getStringExtra("PlayType");
         boolean goFirst = intent.getBooleanExtra("GoFirst", true);
         Player player;
         if (playingType.equals("Bot"))
-            player = new PlayerBot(handler);
+            player = new PlayerBot();
         else {
             RealPlayer realPlayer;
             if (Utilities.CLIENT != null) {
@@ -39,7 +41,6 @@ public class GamePlayActivity extends AppCompatActivity {
                 realPlayer = Utilities.HOST.getPlayer();
             } else realPlayer = null;
 
-            realPlayer.setHandler(handler);
             Thread thread = new Thread(realPlayer);
             thread.start();
             player = realPlayer;

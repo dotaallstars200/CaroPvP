@@ -2,11 +2,13 @@ package com.edu.xogame.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -46,6 +49,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
     private String[] devicesNameArray;
     private WifiP2pDevice[] devicesArray;
     private boolean isHost;
+    private ProgressDialog dialog;
 
 
     @Override
@@ -54,6 +58,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_player);
 
+        resetWifi();
         listView = findViewById(R.id.listView);
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -67,6 +72,12 @@ public class MultiPlayerActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.button);
         button.setOnClickListener(v -> discoverPlayers());
+    }
+
+    private void resetWifi() {
+        WifiManager wifiManager = (WifiManager)this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(false);
+        wifiManager.setWifiEnabled(true);
     }
 
     public WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
@@ -100,10 +111,15 @@ public class MultiPlayerActivity extends AppCompatActivity {
 
     private void startGamePlayActivity() {
         Intent intent = new Intent(this, GamePlayActivity.class);
-
+        if (dialog != null)
+            dialog.dismiss();
+        Utilities.HANDLER.post( () -> {
+            dialog = ProgressDialog.show(this, "",
+                    "Đang tải...", true);
+        });
         intent.putExtra("PlayType", "Player");
         intent.putExtra("GoFirst", isHost);
-        startActivity(intent);
+        startActivityForResult(intent, Utilities.CANCEL_DIALOG);
     }
 
     private void discoverPlayers() {
@@ -122,6 +138,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Log.e("Connect", "GOOD");
+
             }
 
             @Override
@@ -139,6 +156,8 @@ public class MultiPlayerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(getApplicationContext(), "Connect to " + device.deviceName, Toast.LENGTH_SHORT).show();
+
+                    showLoadingDialog(device.deviceName);
                 }
 
                 @Override
@@ -147,6 +166,11 @@ public class MultiPlayerActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void showLoadingDialog(String deviceName) {
+        Utilities.HANDLER.post(() -> dialog = ProgressDialog.show(this, "",
+                "Đang chờ đối thủ", true));
     }
 
     public WifiP2pManager.ConnectionInfoListener connectionInfoListener = info -> {
@@ -219,6 +243,14 @@ public class MultiPlayerActivity extends AppCompatActivity {
                 });
             }
 
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Utilities.CANCEL_DIALOG && resultCode == RESULT_CANCELED) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 }

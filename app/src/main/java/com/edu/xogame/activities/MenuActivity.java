@@ -1,8 +1,11 @@
 package com.edu.xogame.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.edu.xogame.R;
+import com.edu.xogame.Utilities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,6 +14,7 @@ import android.widget.ImageButton;
 public class MenuActivity extends AppCompatActivity {
 
     private Button btnExit, btnPlayWithBot, btnPlayWithFriend, btnHistory;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +31,11 @@ public class MenuActivity extends AppCompatActivity {
 
         btnPlayWithBot.setOnClickListener(v -> {
             Intent intent = new Intent(this, GamePlayActivity.class);
+            dialog = ProgressDialog.show(this, "",
+                    "Đang tải...", true);
 
             intent.putExtra("PlayType", "Bot");
-            startActivity(intent);
+            startActivityForResult(intent, Utilities.CANCEL_DIALOG);
         });
 
         btnPlayWithFriend.setOnClickListener(v -> {
@@ -42,5 +48,12 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Utilities.CANCEL_DIALOG && resultCode == RESULT_CANCELED) {
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
 }
