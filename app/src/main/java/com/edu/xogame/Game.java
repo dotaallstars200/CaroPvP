@@ -34,6 +34,7 @@ public class Game {
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
+        ((GamePlayActivity) (activity)).startTime();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
                 opponent.makeMove();
@@ -44,8 +45,8 @@ public class Game {
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
-
             if (opponent instanceof PlayerBot) {
+
                 IFunction positiveFunc = () -> {
                     removeBoardFromActivity();
                     ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
@@ -88,7 +89,7 @@ public class Game {
 
     public void changeTurn() {
         isTurnO = !isTurnO;
-
+        ((GamePlayActivity) (activity)).startTime();
         if (!isMyTurn() && opponent instanceof PlayerBot) {
             opponent.makeMove();
         }
@@ -101,7 +102,7 @@ public class Game {
         for (Direction direction : Direction.values()) {
             ++onSameAxis;
             point += getPointByDirection(anchor, direction, sideChecking, trackTable);
-            if (point >= WIN_NUMBERS)
+            if (point >= WIN_NUMBERS )
                 return true;
             // on the other axis, then reset point
             if (onSameAxis == 2) {
