@@ -1,6 +1,7 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
@@ -23,7 +24,7 @@ public class Game {
     private static final int MAX_PROGRESS = 100;
     private static final int PROGRESS_STEP = 1;
     int sumProgress = 0;
-    int maxValue = 60;
+    int maxValue = 10;
     public boolean isRunning;
     Thread myBackgroundThread;
 
@@ -33,7 +34,6 @@ public class Game {
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
         progressBar = activity.findViewById(R.id.progressBar);
-        isRunning = true;
     }
 
     public Player getOpponent() {
@@ -54,6 +54,7 @@ public class Game {
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
+            isRunning = false;
             if (opponent instanceof PlayerBot) {
 
                 IFunction positiveFunc = () -> {
@@ -73,7 +74,7 @@ public class Game {
         } else {
             removeBoardFromActivity();
         }
-        isRunning = false;
+
     }
     
     private void removeBoardFromActivity() {
@@ -120,7 +121,7 @@ public class Game {
                 onSameAxis = 0;
             }
         }
-
+        Log.e("CHECK", String.valueOf(isRunning));
         return false;
     }
 
@@ -193,11 +194,10 @@ public class Game {
         public void run() {
             try {
                 progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
-                sumProgress += PROGRESS_STEP;
 
                 if (sumProgress >= maxValue) {
                     progressBar.setVisibility(View.INVISIBLE);
-
+                    isRunning=false;
                     if (isMyTurn()) {
                         endGame("Đối phương đã thắng",true);
                     } else {
@@ -212,9 +212,10 @@ public class Game {
 
     private final Runnable backgroundTask = () -> {
         try {
-            for (int i = 0; i < maxValue; i++) {
+            for (sumProgress = 0; sumProgress < maxValue; sumProgress += PROGRESS_STEP) {
                 if (!isRunning)
                     return;
+
                 Thread.sleep(1000);
                 Utilities.HANDLER.post(foregroundRunnable);
             }
