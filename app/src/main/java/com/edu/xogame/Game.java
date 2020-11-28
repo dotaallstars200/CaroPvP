@@ -49,7 +49,7 @@ public class Game {
     public void remake(){
         removeBoardFromActivity();
         boolean playWithBot = opponent instanceof PlayerBot;
-        ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+        ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
     }
     public void undo(){
         board.uncheckCell();
@@ -69,6 +69,7 @@ public class Game {
 
                 Utilities.createDialog(result, "Do you want to play a new game?",
                         "YES", "NO", activity, positiveFunc, negativeFunc);
+                ((GamePlayActivity)(activity)).updatePoint(result);
             } else {
                 IFunction negativeFunc = activity::finish;
                 Utilities.createDialog(result, "Bấm ok để thoát!",
