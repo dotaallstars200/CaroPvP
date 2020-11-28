@@ -1,7 +1,11 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.widget.HorizontalScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -21,9 +25,11 @@ public class Game {
     private boolean isTurnO = true; // O always goes first
     private final Activity activity;
 
+
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
+
         board = new Board(activity.getApplicationContext(), this);
     }
 
@@ -40,10 +46,18 @@ public class Game {
         }
 
     }
-
+    public void remake(){
+        removeBoardFromActivity();
+        boolean playWithBot = opponent instanceof PlayerBot;
+        ((GamePlayActivity)(activity)).newGame(playWithBot, !goFirst);
+    }
+    public void undo(){
+        board.uncheckCell();
+    }
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
+
 
             if (opponent instanceof PlayerBot) {
                 IFunction positiveFunc = () -> {
@@ -62,6 +76,7 @@ public class Game {
             }
         } else {
             removeBoardFromActivity();
+
         }
     }
     
@@ -90,8 +105,15 @@ public class Game {
         isTurnO = !isTurnO;
 
         if (!isMyTurn() && opponent instanceof PlayerBot) {
+
             opponent.makeMove();
+
+
+
+           
+
         }
+
     }
 
     public boolean checkWin(CellPosition anchor, int sideChecking, int[][] trackTable) {
