@@ -5,12 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity"
+    android:background="@drawable/wood_bg"
     android:id="@+id/linear">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="horizontal"
-        android:id="@+id/info">
+        android:id="@+id/info"
+
+        >
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -84,13 +87,17 @@
             </HorizontalScrollView>
         </ScrollView>
     </LinearLayout>
-
-    <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/Menu"
+        android:layout_below="@+id/board"
+
+        >
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="129dp"
-        android:layout_below="@+id/board"
-        android:background="@android:color/holo_blue_bright"
+
         >
 
 
@@ -119,4 +126,5 @@
             />
 
     </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

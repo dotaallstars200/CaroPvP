@@ -70,7 +70,6 @@ public class GamePlayActivity extends AppCompatActivity {
             game.remake();
         });
         btnUndo.setOnClickListener(v -> {
-            Toast.makeText(context,"Undo",Toast.LENGTH_SHORT).show();
             game.undo();
         });
     }
