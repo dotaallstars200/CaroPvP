@@ -100,13 +100,13 @@ public class MenuActivity extends AppCompatActivity {
             System.exit(0);
         });
 
-        btnHistory.setOnTouchListener(new View.OnTouchListener() {
+        btnPlayWithFriend.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction()==MotionEvent.ACTION_UP){
-                    btnHistory.startAnimation(scale_down);
+                    btnPlayWithFriend.startAnimation(scale_down);
                 }else if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    btnHistory.startAnimation(scale_up);
+                    btnPlayWithFriend.startAnimation(scale_up);
                 }
                 return false;
             }
