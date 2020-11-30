@@ -1,26 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity"
+    android:background="@drawable/wood_bg"
     android:id="@+id/linear">
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:id="@+id/info"
 
         >
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalSrcollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-        </HorizontalScrollView>
-    </ScrollView>
+            <ImageView
+                android:id="@+id/avataP"
+                android:layout_width="60dp"
+                android:layout_height="150dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/human_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="45dp"
+                android:textSize="50dp"
+                android:id="@+id/point_human"
+                />
+
+
+
+            <TextView
+                android:id="@+id/point_bot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="230dp"
+
+                android:layout_marginTop="45dp"
+                android:text="0"
+                android:textSize="50dp"
+
+                />
+
+            <ImageView
+                android:id="@+id/avataB"
+                android:layout_width="60dp"
+                android:layout_height="150dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="36dp"
+                android:src="@drawable/bot_icon" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="451dp"
+        android:layout_below="@+id/info"
+
+        >
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            >
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalSrcollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </HorizontalScrollView>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Menu"
+        android:layout_below="@+id/board"
+
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="129dp"
+
+        >
+
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:id="@+id/btnNewGame"
+            android:drawableLeft="@drawable/newgame_foreground"
+            android:gravity="left|center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="NewGame"
+            android:layout_marginRight="40dp"
+            android:textSize="10dp"
+            android:textStyle="bold" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/btnUndo"
+            android:drawableLeft="@drawable/undo_foreground"
+            android:gravity="left|center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="Undo"
+            android:layout_marginRight="240dp"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            />
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -32,3 +136,8 @@
         android:background="@color/colorAccent" />
 
 </LinearLayout>
+
+    </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
+

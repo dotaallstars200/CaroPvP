@@ -5,6 +5,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
+import android.content.Context;
+import android.util.Log;
+import android.widget.HorizontalScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.datastructure.CellPosition;
@@ -28,9 +34,11 @@ public class Game {
         public boolean isRunning;
         Thread myBackgroundThread;
 
+
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
+
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
         progressBar = activity.findViewById(R.id.progressBar);
@@ -50,11 +58,20 @@ public class Game {
         }
 
     }
-
+    public void remake(){
+        removeBoardFromActivity();
+        boolean playWithBot = opponent instanceof PlayerBot;
+        ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
+    }
+    public void undo(){
+        board.uncheckCell();
+    }
     public void endGame(String result, boolean showDialog) {
 
         if (showDialog) {
+
             isRunning = false;
+
             if (opponent instanceof PlayerBot) {
 
                 IFunction positiveFunc = () -> {
@@ -66,6 +83,7 @@ public class Game {
 
                 Utilities.createDialog(result, "Do you want to play a new game?",
                         "YES", "NO", activity, positiveFunc, negativeFunc);
+                ((GamePlayActivity)(activity)).updatePoint(result);
             } else {
                 IFunction negativeFunc = activity::finish;
                 Utilities.createDialog(result, "Bấm ok để thoát!",
@@ -73,6 +91,7 @@ public class Game {
             }
         } else {
             removeBoardFromActivity();
+
         }
 
     }
@@ -102,8 +121,15 @@ public class Game {
         isTurnO = !isTurnO;
         sumProgress = 0;
         if (!isMyTurn() && opponent instanceof PlayerBot) {
+
             opponent.makeMove();
+
+
+
+           
+
         }
+
     }
 
     public boolean checkWin(CellPosition anchor, int sideChecking, int[][] trackTable) {
