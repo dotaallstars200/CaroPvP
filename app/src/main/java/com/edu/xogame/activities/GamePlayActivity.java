@@ -9,11 +9,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-
 import android.widget.Toast;
 
 import com.edu.xogame.Game;
@@ -34,6 +37,7 @@ public class GamePlayActivity extends AppCompatActivity {
     private TextView tvP_Bot;
     private  int p_Player=0;// point of player
     private int p_Opponet=0;// point of opponet
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

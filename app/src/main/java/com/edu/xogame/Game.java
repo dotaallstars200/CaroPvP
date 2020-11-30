@@ -1,15 +1,17 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.util.Log;
+import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.ProgressBar;
 import android.content.Context;
 import android.util.Log;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 
-import com.edu.xogame.R;
 import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
@@ -18,12 +20,19 @@ import com.edu.xogame.views.Board;
 
 
 public class Game {
-    public static final int WIN_NUMBERS = 5;
-    private final boolean goFirst;
-    private Player opponent;
-    private final Board board;
-    private boolean isTurnO = true; // O always goes first
-    private final Activity activity;
+        public static final int WIN_NUMBERS = 5;
+        private final boolean goFirst;
+        private Player opponent;
+        private final Board board;
+        private boolean isTurnO = true; // O always goes first
+        private final Activity activity;
+        ProgressBar progressBar;
+        private static final int MAX_PROGRESS = 100;
+        private static final int PROGRESS_STEP = 1;
+        int sumProgress = 0;
+        int maxValue = 10;
+        public boolean isRunning;
+        Thread myBackgroundThread;
 
 
     public Game(Activity activity, boolean goFirst) {
@@ -31,6 +40,8 @@ public class Game {
         this.activity = activity;
 
         board = new Board(activity.getApplicationContext(), this);
+        isRunning = true;
+        progressBar = activity.findViewById(R.id.progressBar);
     }
 
     public Player getOpponent() {
@@ -40,6 +51,7 @@ public class Game {
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
+        startTimer();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
                 opponent.makeMove();
@@ -58,8 +70,10 @@ public class Game {
 
         if (showDialog) {
 
+            isRunning = false;
 
             if (opponent instanceof PlayerBot) {
+
                 IFunction positiveFunc = () -> {
                     removeBoardFromActivity();
                     ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
@@ -79,6 +93,7 @@ public class Game {
             removeBoardFromActivity();
 
         }
+
     }
     
     private void removeBoardFromActivity() {
@@ -104,7 +119,7 @@ public class Game {
 
     public void changeTurn() {
         isTurnO = !isTurnO;
-
+        sumProgress = 0;
         if (!isMyTurn() && opponent instanceof PlayerBot) {
 
             opponent.makeMove();
@@ -124,7 +139,7 @@ public class Game {
         for (Direction direction : Direction.values()) {
             ++onSameAxis;
             point += getPointByDirection(anchor, direction, sideChecking, trackTable);
-            if (point >= WIN_NUMBERS)
+            if (point >= WIN_NUMBERS )
                 return true;
             // on the other axis, then reset point
             if (onSameAxis == 2) {
@@ -132,7 +147,7 @@ public class Game {
                 onSameAxis = 0;
             }
         }
-
+        Log.e("CHECK", String.valueOf(isRunning));
         return false;
     }
 
@@ -188,4 +203,51 @@ public class Game {
     public enum Direction {
         TOP, BOT, LEFT, RIGHT, LEFT_TOP, RIGHT_BOT, LEFT_BOT, RIGHT_TOP,
     }
+
+    public void startTimer() {
+        if (!isRunning) {
+            return;
+        }
+        sumProgress = 0;
+        progressBar.setMax(MAX_PROGRESS);
+        progressBar.setVisibility(View.VISIBLE);
+        myBackgroundThread = new Thread(backgroundTask, "bgTask");
+        myBackgroundThread.start();
+    }
+
+    private final Runnable foregroundRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
+
+                if (sumProgress >= maxValue) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    isRunning=false;
+                    if (isMyTurn()) {
+                        endGame("Đối phương đã thắng",true);
+                    } else {
+                        endGame("Bạn đã thắng",true);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private final Runnable backgroundTask = () -> {
+        try {
+            for (sumProgress = 0; sumProgress < maxValue; sumProgress += PROGRESS_STEP) {
+                if (!isRunning)
+                    return;
+
+                Thread.sleep(1000);
+                Utilities.HANDLER.post(foregroundRunnable);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    };
 }
