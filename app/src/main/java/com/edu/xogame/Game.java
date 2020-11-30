@@ -14,19 +14,19 @@ import com.edu.xogame.views.Board;
 
 
 public class Game {
-    public static final int WIN_NUMBERS = 5;
-    private final boolean goFirst;
-    private Player opponent;
-    private final Board board;
-    private boolean isTurnO = true; // O always goes first
-    private final Activity activity;
-    ProgressBar progressBar;
-    private static final int MAX_PROGRESS = 100;
-    private static final int PROGRESS_STEP = 1;
-    int sumProgress = 0;
-    int maxValue = 10;
-    public boolean isRunning;
-    Thread myBackgroundThread;
+        public static final int WIN_NUMBERS = 5;
+        private final boolean goFirst;
+        private Player opponent;
+        private final Board board;
+        private boolean isTurnO = true; // O always goes first
+        private final Activity activity;
+        ProgressBar progressBar;
+        private static final int MAX_PROGRESS = 100;
+        private static final int PROGRESS_STEP = 1;
+        int sumProgress = 0;
+        int maxValue = 10;
+        public boolean isRunning;
+        Thread myBackgroundThread;
 
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
