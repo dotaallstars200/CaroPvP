@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 public class CellPosition {
     public int row;
     public int column;
-
     public CellPosition(int row, int column) {
         this.row = row;
         this.column = column;

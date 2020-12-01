@@ -1,8 +1,10 @@
 package com.edu.xogame.players;
 
+
 import android.os.Handler;
 
 import com.edu.xogame.Utilities;
+
 import com.edu.xogame.views.Board;
 
 public abstract class Player {

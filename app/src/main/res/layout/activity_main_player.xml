@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.GamePlayActivity"
+    android:background="@drawable/bg_luongtest"
+    android:id="@+id/linear">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="horizontal"
+        android:id="@+id/info"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/avataP"
+                android:layout_width="63dp"
+                android:layout_height="96dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="37dp"
+                android:src="@drawable/human_icon" />
+
+
+            <TextView
+                android:id="@+id/point_human"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/avataP"
+                android:text="0"
+                android:textSize="50dp" />
+
+            <TextView
+                android:id="@+id/point_bot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+
+                android:layout_marginLeft="230dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="60dp"
+
+                android:layout_toStartOf="@+id/avataB"
+                android:text="0"
+                android:textSize="50dp" />
+
+            <ImageView
+                android:id="@+id/avataB"
+                android:layout_width="63dp"
+                android:layout_height="96dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="37dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/bot_icon" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="100dp"
+                android:background="@color/colorAccent" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="451dp"
+        android:layout_below="@+id/info"
+
+        >
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+
+            >
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalSrcollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </HorizontalScrollView>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Menu"
+        android:layout_below="@+id/board"
+
+        >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="129dp"
+
+        />
+    </LinearLayout>
+</RelativeLayout>
