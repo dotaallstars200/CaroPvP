@@ -33,6 +33,7 @@ import com.edu.xogame.Utilities;
 import com.edu.xogame.network.Client;
 import com.edu.xogame.network.Host;
 import com.edu.xogame.network.WiFiDirectBroadcastReceiver;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 import java.net.InetAddress;
@@ -72,7 +73,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        Button button = findViewById(R.id.button);
+        FloatingActionButton button = findViewById(R.id.button);
         button.setOnClickListener(v -> discoverPlayers());
     }
 
