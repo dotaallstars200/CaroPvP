@@ -38,7 +38,7 @@ public class Game {
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
-
+        progressBar = activity.findViewById(R.id.progressBar);
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
 
@@ -51,7 +51,7 @@ public class Game {
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
-        //startTimer();
+        startTimer();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
                 opponent.makeMove();
@@ -220,7 +220,7 @@ public class Game {
         @Override
         public void run() {
             try {
-                progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
+                progressBar.setProgress((int) ((float) sumProgress / maxValue * 10));
 
                 if (sumProgress >= maxValue) {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -243,7 +243,7 @@ public class Game {
                 if (!isRunning)
                     return;
 
-                Thread.sleep(1000);
+                Thread.sleep(10);
                 Utilities.HANDLER.post(foregroundRunnable);
             }
 
