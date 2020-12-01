@@ -15,6 +15,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -55,6 +56,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        Utilities.IS_AVAILABLE = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_player);
 
@@ -113,13 +115,10 @@ public class MultiPlayerActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GamePlayActivity.class);
         if (dialog != null)
             dialog.dismiss();
-        Utilities.HANDLER.post( () -> {
-            dialog = ProgressDialog.show(this, "",
-                    "Đang tải...", true);
-        });
+
         intent.putExtra("PlayType", "Player");
         intent.putExtra("GoFirst", isHost);
-        startActivityForResult(intent, Utilities.CANCEL_DIALOG);
+        startActivity(intent);
     }
 
     private void discoverPlayers() {
@@ -156,7 +155,6 @@ public class MultiPlayerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     Toast.makeText(getApplicationContext(), "Connect to " + device.deviceName, Toast.LENGTH_SHORT).show();
-
                     showLoadingDialog(device.deviceName);
                 }
 
@@ -177,10 +175,13 @@ public class MultiPlayerActivity extends AppCompatActivity {
         final InetAddress groupOwnerAddress = info.groupOwnerAddress;
 
         IFunction startActivity = this::startGamePlayActivity;
-
         if (info.groupFormed && info.isGroupOwner) {
             // Host
             Log.e("Connect", "HOST");
+
+            if (Utilities.HOST != null)
+                Utilities.HOST.kill();
+
             Utilities.HOST = new Host(startActivity);
             Utilities.HOST.start();
             isHost = true;
@@ -188,6 +189,8 @@ public class MultiPlayerActivity extends AppCompatActivity {
         } else if (info.groupFormed) {
             // Client
             Log.e("Connect", "CLIENT");
+            if (Utilities.CLIENT != null)
+                Utilities.CLIENT.kill();
             Utilities.CLIENT = new Client(groupOwnerAddress, startActivity);
             Utilities.CLIENT.start();
             isHost = false;
@@ -209,6 +212,8 @@ public class MultiPlayerActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+        if(dialog != null)
+            dialog.dismiss();
     }
 
     public static void disconnect(Context context) {
@@ -245,12 +250,5 @@ public class MultiPlayerActivity extends AppCompatActivity {
 
         }
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Utilities.CANCEL_DIALOG && resultCode == RESULT_CANCELED) {
-            dialog.dismiss();
-            dialog = null;
-        }
-    }
+
 }

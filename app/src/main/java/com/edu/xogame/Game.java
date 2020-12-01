@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 
 import com.edu.xogame.activities.GamePlayActivity;
+import com.edu.xogame.activities.MultiPlayerActivity;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
@@ -88,6 +89,7 @@ public class Game {
                 IFunction negativeFunc = activity::finish;
                 Utilities.createDialog(result, "Bấm ok để thoát!",
                         null, "OK", activity, null, negativeFunc);
+                MultiPlayerActivity.disconnect(activity);
             }
         } else {
             removeBoardFromActivity();
@@ -220,7 +222,7 @@ public class Game {
         @Override
         public void run() {
             try {
-                progressBar.setProgress((int) ((float) sumProgress / maxValue * 10));
+                progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
 
                 if (sumProgress >= maxValue) {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -243,7 +245,7 @@ public class Game {
                 if (!isRunning)
                     return;
 
-                Thread.sleep(10);
+                Thread.sleep(1000);
                 Utilities.HANDLER.post(foregroundRunnable);
             }
 

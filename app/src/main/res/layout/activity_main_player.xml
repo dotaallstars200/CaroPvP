@@ -62,6 +62,13 @@
                 android:layout_marginRight="37dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/bot_icon" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="100dp"
+                android:background="@color/colorAccent" />
         </RelativeLayout>
 
     </LinearLayout>
