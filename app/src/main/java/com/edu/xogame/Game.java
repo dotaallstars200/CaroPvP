@@ -41,7 +41,7 @@ public class Game {
 
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
-        progressBar = activity.findViewById(R.id.progressBar);
+
     }
 
     public Player getOpponent() {
@@ -51,7 +51,7 @@ public class Game {
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
-        startTimer();
+        //startTimer();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
                 opponent.makeMove();
@@ -204,6 +204,7 @@ public class Game {
         TOP, BOT, LEFT, RIGHT, LEFT_TOP, RIGHT_BOT, LEFT_BOT, RIGHT_TOP,
     }
 
+
     public void startTimer() {
         if (!isRunning) {
             return;
@@ -250,4 +251,5 @@ public class Game {
             e.printStackTrace();
         }
     };
+
 }

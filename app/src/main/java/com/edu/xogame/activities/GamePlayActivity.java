@@ -4,19 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.Activity;
-import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View;
+
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.edu.xogame.Game;
@@ -25,8 +26,6 @@ import com.edu.xogame.Utilities;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.players.RealPlayer;
-
-import java.util.Random;
 
 public class GamePlayActivity extends AppCompatActivity {
     private Context context;
@@ -41,20 +40,27 @@ public class GamePlayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
-        context=this;
-        btnNewGame=(Button)findViewById(R.id.btnNewGame);
-        btnUndo=(Button)findViewById(R.id.btnUndo);
 
         Intent intent = getIntent();
         String playingType = intent.getStringExtra("PlayType");
         boolean goFirst = intent.getBooleanExtra("GoFirst", true);
         Player player;
-        if (playingType.equals("Bot"))
+        if (playingType.equals("Bot")) {
             player = new PlayerBot();
+            setContentView(R.layout.activity_main_bot);
+            btnNewGame=(Button)findViewById(R.id.btnNewGame);
+            btnUndo=(Button)findViewById(R.id.btnUndo);
+            btnNewGame.setOnClickListener(v -> {
+                game.remake();
+            });
+            btnUndo.setOnClickListener(v -> {
+                game.undo();
+            });
+        }
         else {
+            setContentView(R.layout.activity_main_player);
             RealPlayer realPlayer;
             if (Utilities.CLIENT != null) {
                 realPlayer = Utilities.CLIENT.getPlayer();
@@ -69,13 +75,6 @@ public class GamePlayActivity extends AppCompatActivity {
 
         newGame(goFirst, player);
 
-        btnNewGame.setOnClickListener(v -> {
-            Toast.makeText(context,"New Game",Toast.LENGTH_SHORT).show();
-            game.remake();
-        });
-        btnUndo.setOnClickListener(v -> {
-            game.undo();
-        });
     }
     @SuppressLint("SetTextI18n")
     public void updatePoint(String result){//0 = bot, 1 = human

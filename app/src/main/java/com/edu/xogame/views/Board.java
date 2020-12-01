@@ -14,8 +14,8 @@ import java.util.Stack;
 
 public class Board  {
 
-    public static final int NUMBER_COLUMNS = 50;
-    public static final int NUMBER_ROWS = 50;
+    public static final int NUMBER_COLUMNS = 25;
+    public static final int NUMBER_ROWS = 25;
 
     private final TableLayout tableLayout;
     private final int[][] trackTable;
