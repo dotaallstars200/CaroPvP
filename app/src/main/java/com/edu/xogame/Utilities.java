@@ -13,6 +13,7 @@ public class Utilities {
     public static Client CLIENT;
     public static final int CANCEL_DIALOG = 0;
     public static final Handler HANDLER = new Handler();
+    public static boolean IS_AVAILABLE = true;
 
 
     public static void createDialog(String title, String message , String positiveText, String negativeText, Context context, IFunction positiveFunc, IFunction negativeFunc) {
@@ -31,6 +32,5 @@ public class Utilities {
         alertDialog.setCancelable(false);
         //Hiển thị
         alertDialog.show();
-
     }
 }

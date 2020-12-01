@@ -25,15 +25,29 @@ public class Host extends Thread {
         return player;
     }
 
+    public void startGame() {
+        startActivity.execute();
+    }
+
     @Override
     public void run() {
         try {
             serverSocket = new ServerSocket(PORT);
             socket = serverSocket.accept();
             player = new RealPlayer(socket);
+            Thread thread = new Thread(player);
+            thread.start();
 
-            startActivity.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void kill() {
+        try {
+            serverSocket.close();
+            socket.close();
+            player.kill();
         } catch (IOException e) {
             e.printStackTrace();
         }
