@@ -220,7 +220,7 @@ public class Game {
         @Override
         public void run() {
             try {
-                progressBar.setProgress((int) ((float) sumProgress / maxValue * 10));
+                progressBar.setProgress((int) ((float) sumProgress / maxValue * 100));
 
                 if (sumProgress >= maxValue) {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -243,7 +243,7 @@ public class Game {
                 if (!isRunning)
                     return;
 
-                Thread.sleep(10);
+                Thread.sleep(1000);
                 Utilities.HANDLER.post(foregroundRunnable);
             }
 
