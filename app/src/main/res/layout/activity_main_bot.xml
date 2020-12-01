@@ -30,10 +30,6 @@
                 style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
 
-                android:layout_height="50dp"
-                android:layout_marginTop="100dp"
-
-
                 android:layout_height="10dp"
                 android:layout_marginTop="130dp"
                  />
