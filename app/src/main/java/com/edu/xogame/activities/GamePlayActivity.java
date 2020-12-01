@@ -41,8 +41,6 @@ public class GamePlayActivity extends AppCompatActivity {
                 realPlayer = Utilities.HOST.getPlayer();
             } else realPlayer = null;
 
-            Thread thread = new Thread(realPlayer);
-            thread.start();
             player = realPlayer;
         }
 
@@ -71,7 +69,8 @@ public class GamePlayActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         MultiPlayerActivity.disconnect(this);
+        Utilities.IS_AVAILABLE = true;
+        super.onDestroy();
     }
 }

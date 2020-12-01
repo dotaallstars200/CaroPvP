@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.edu.xogame.R;
 import com.edu.xogame.activities.GamePlayActivity;
+import com.edu.xogame.activities.MultiPlayerActivity;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
@@ -59,6 +60,7 @@ public class Game {
                 IFunction negativeFunc = activity::finish;
                 Utilities.createDialog(result, "Bấm ok để thoát!",
                         null, "OK", activity, null, negativeFunc);
+                MultiPlayerActivity.disconnect(activity);
             }
         } else {
             removeBoardFromActivity();
