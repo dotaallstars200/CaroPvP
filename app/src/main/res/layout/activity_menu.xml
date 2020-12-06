@@ -21,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="95dp"
         android:layout_gravity="center"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/btn3"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn3_1_may"
         android:drawablePadding="@android:dimen/app_icon_size"
 
         />
@@ -33,7 +33,7 @@
         android:layout_height="95dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn3_ban" />
+        android:background="@drawable/btn3_1_ban" />
 
     <Button
         android:id="@+id/btnHistory"
@@ -41,7 +41,7 @@
         android:layout_height="95dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/lichsu"
+        android:background="@drawable/btn3_1_lichsu"
        />
 
     <Button
@@ -50,7 +50,6 @@
         android:layout_height="95dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/btn3_thoat"
-       />
+        android:background="@drawable/btn3_1_thoat" />
 
 </LinearLayout>
