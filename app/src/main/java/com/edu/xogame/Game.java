@@ -1,16 +1,21 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.HorizontalScrollView;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.edu.xogame.R;
 import com.edu.xogame.activities.GamePlayActivity;
+import com.edu.xogame.database.DBManager;
+import com.edu.xogame.database.DatabaseHelper;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.views.Board;
+
+import java.util.Arrays;
 
 
 public class Game {
@@ -20,6 +25,8 @@ public class Game {
     private final Board board;
     private boolean isTurnO = true; // O always goes first
     private final Activity activity;
+
+    private DBManager dbManager;
 
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
@@ -38,7 +45,12 @@ public class Game {
             if (!goFirst)
                 opponent.makeMove();
         }
+    }
 
+    public void show() {
+        HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
+        horizontalScrollView.addView(board.getTableLayout());
+        Log.e("<<BOARDGAMESHOW>>", Arrays.deepToString(board.getTrackTable()));
     }
 
     public void endGame(String result, boolean showDialog) {
@@ -60,6 +72,11 @@ public class Game {
                 Utilities.createDialog(result, "Bấm ok để thoát!",
                         null, "OK", activity, null, negativeFunc);
             }
+            dbManager = new DBManager(activity.getApplicationContext());
+            dbManager.open();
+            dbManager.insert(Arrays.deepToString(board.getTrackTable()));
+            dbManager.close();
+
         } else {
             removeBoardFromActivity();
         }

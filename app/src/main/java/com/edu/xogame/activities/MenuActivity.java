@@ -8,13 +8,11 @@ import com.edu.xogame.Utilities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -79,6 +77,11 @@ public class MenuActivity extends AppCompatActivity {
                 }
                 return false;
             }
+        });
+
+        btnHistory.setOnClickListener(v -> {
+           Intent intent = new Intent(this, GameHistoryActivity.class);
+           startActivity(intent);
         });
 
 
