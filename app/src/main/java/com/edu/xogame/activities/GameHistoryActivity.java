@@ -24,8 +24,8 @@ public class GameHistoryActivity extends AppCompatActivity {
     private DBManager dbManager;
     private ListView listView;
     private SimpleCursorAdapter cursorAdapter;
-    private final String[] from = {DatabaseHelper._ID, DatabaseHelper.BOARDGAME};
-    private final int[] to = {R.id.id, R.id.boardGame};
+    private final String[] from = {DatabaseHelper._ID, DatabaseHelper.BOARDGAME, DatabaseHelper.RESULT, DatabaseHelper.OPPONENT};
+    private final int[] to = {R.id.id, R.id.boardGame, R.id.result, R.id.opponent };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

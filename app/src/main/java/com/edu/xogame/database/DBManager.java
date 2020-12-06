@@ -26,14 +26,16 @@ public class DBManager {
         dbHelper.close();
     }
 
-    public void insert(String boardgame) {
+    public void insert(String boardgame, String result, String opponent) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.BOARDGAME, boardgame);
+        contentValue.put(DatabaseHelper.RESULT, result);
+        contentValue.put(DatabaseHelper.OPPONENT, opponent);
         database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
     }
 
     public Cursor fetch() {
-        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.BOARDGAME };
+        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.BOARDGAME, DatabaseHelper.RESULT, DatabaseHelper.OPPONENT };
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -41,9 +43,11 @@ public class DBManager {
         return cursor;
     }
 
-    public int update(long _id, String boardgame) {
+    public int update(long _id, String boardgame, String result, String opponent) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.BOARDGAME, boardgame);
+        contentValues.put(DatabaseHelper.RESULT, result);
+        contentValues.put(DatabaseHelper.OPPONENT, opponent);
         int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, DatabaseHelper._ID + " = " + _id, null);
         return i;
     }

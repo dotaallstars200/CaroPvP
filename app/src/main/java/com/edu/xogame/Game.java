@@ -54,6 +54,8 @@ public class Game {
     }
 
     public void endGame(String result, boolean showDialog) {
+        String resultToStore = "";
+        String opponentToStore = "";
 
         if (showDialog) {
 
@@ -72,9 +74,29 @@ public class Game {
                 Utilities.createDialog(result, "Bấm ok để thoát!",
                         null, "OK", activity, null, negativeFunc);
             }
+
+            // Lưu kết quả trận đấu
+            if (result.equals("YOU WIN THE GAME!!!")) {
+                resultToStore = "Thắng";
+            }
+            else if (result.equals("OPPONENT WIN THE GAME!!!")) {
+                resultToStore = "Thua";
+            }
+            else if (result.equals("DRAW!!!")) {
+                resultToStore = "Hoà";
+            }
+            else {
+                result = "NONE";
+            }
+
+            // Lưu opponent
+            if (opponent instanceof PlayerBot) {
+                opponentToStore = "BOT";
+            }
+
             dbManager = new DBManager(activity.getApplicationContext());
             dbManager.open();
-            dbManager.insert(Arrays.deepToString(board.getTrackTable()));
+            dbManager.insert(Arrays.deepToString(board.getTrackTable()), resultToStore, opponentToStore);
             dbManager.close();
 
         } else {

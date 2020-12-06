@@ -119,6 +119,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
         });
         intent.putExtra("PlayType", "Player");
         intent.putExtra("GoFirst", isHost);
+
         startActivityForResult(intent, Utilities.CANCEL_DIALOG);
     }
 
