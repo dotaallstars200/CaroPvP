@@ -47,8 +47,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
     private ListView listView;
     private IntentFilter intentFilter;
 
-    private List<WifiP2pDevice> peers = new ArrayList<>();
-    private String[] devicesNameArray;
+    private final List<WifiP2pDevice> peers = new ArrayList<>();
     private WifiP2pDevice[] devicesArray;
     private boolean isHost;
     private ProgressDialog dialog;
@@ -93,7 +92,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
 
             int size = peerList.getDeviceList().size();
             devicesArray = new WifiP2pDevice[size];
-            devicesNameArray = new String[size];
+            String[] devicesNameArray = new String[size];
 
             int index = 0;
             for (WifiP2pDevice device : peerList.getDeviceList()) {

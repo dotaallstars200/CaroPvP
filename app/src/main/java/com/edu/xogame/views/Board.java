@@ -110,9 +110,8 @@ public class Board  {
     }
     public void uncheckCell()
     {
-        if (num_order.empty())//Board empty
+        if (num_order.empty() || num_order.size() == 1)//Board empty
             return;
-
 
         Cell checkofBot = checkedCells.get(num_order.pop());
         Cell checkofPlayer = checkedCells.get(num_order.pop());

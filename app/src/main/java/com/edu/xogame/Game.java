@@ -5,12 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
-import android.content.Context;
-import android.util.Log;
-import android.widget.HorizontalScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.activities.MultiPlayerActivity;
@@ -61,17 +55,14 @@ public class Game {
     }
     public void remake(){
         removeBoardFromActivity();
-        boolean playWithBot = opponent instanceof PlayerBot;
         ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
     }
     public void undo(){
         board.uncheckCell();
     }
     public void endGame(String result, boolean showDialog) {
-
+        isRunning = false;
         if (showDialog) {
-
-            isRunning = false;
 
             if (opponent instanceof PlayerBot) {
 
@@ -93,7 +84,6 @@ public class Game {
             }
         } else {
             removeBoardFromActivity();
-
         }
 
     }

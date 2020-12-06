@@ -50,8 +50,8 @@ public class GamePlayActivity extends AppCompatActivity {
         if (playingType.equals("Bot")) {
             player = new PlayerBot();
             setContentView(R.layout.activity_main_bot);
-            btnNewGame=(Button)findViewById(R.id.btnNewGame);
-            btnUndo=(Button)findViewById(R.id.btnUndo);
+            btnNewGame= findViewById(R.id.btnNewGame);
+            btnUndo= findViewById(R.id.btnUndo);
             btnNewGame.setOnClickListener(v -> {
                 game.remake();
             });
@@ -76,8 +76,8 @@ public class GamePlayActivity extends AppCompatActivity {
     }
     @SuppressLint("SetTextI18n")
     public void updatePoint(String result){//0 = bot, 1 = human
-        tvP_Bot=(TextView)findViewById(R.id.point_bot);
-        tvP_Human=(TextView)findViewById(R.id.point_human);
+        tvP_Bot= findViewById(R.id.point_bot);
+        tvP_Human= findViewById(R.id.point_human);
 
         if (result.equals("YOU")) {
             p_Player+=1;
@@ -87,8 +87,6 @@ public class GamePlayActivity extends AppCompatActivity {
              p_Opponet+=1;
             tvP_Bot.setText(String.valueOf(p_Opponet));
         }
-
-
     }
 
 
@@ -105,11 +103,15 @@ public class GamePlayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (game.getOpponent() instanceof PlayerBot)
+            game.isRunning = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (game.getOpponent() instanceof PlayerBot)
+            game.isRunning = true;
     }
 
     @Override
