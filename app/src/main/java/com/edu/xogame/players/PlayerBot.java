@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.views.Board;
+import android.app.Activity;
 
 public class PlayerBot extends Player {
 
