@@ -4,4 +4,5 @@
     <string name="play_with_friend">Play with friend</string>
     <string name="history">History</string>
     <string name="exit">Exit</string>
+    <string name="header_history">Các ván cờ đã kết thúc</string>
 </resources>

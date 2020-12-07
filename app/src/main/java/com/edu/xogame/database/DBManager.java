@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class DBManager {
 
     private DatabaseHelper dbHelper;
-    private Context context;
+    private final Context context;
     private SQLiteDatabase database;
 
     public DBManager(Context c) {
@@ -40,7 +40,26 @@ public class DBManager {
         if (cursor != null) {
             cursor.moveToFirst();
         }
+
         return cursor;
+    }
+
+    public int getNumberOfGameWin() {
+        final String SQL_STATEMENT = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_NAME + " WHERE RESULT=?";
+        Cursor mCount = database.rawQuery(SQL_STATEMENT, new String[] {"Thắng"});
+        mCount.moveToFirst();
+        int count= mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
+    public int getNumberOfGameLose() {
+        final String SQL_STATEMENT = "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_NAME + " WHERE RESULT=?";
+        Cursor mCount = database.rawQuery(SQL_STATEMENT, new String[] {"Thua"});
+        mCount.moveToFirst();
+        int count= mCount.getInt(0);
+        mCount.close();
+        return count;
     }
 
     public int update(long _id, String boardgame, String result, String opponent) {

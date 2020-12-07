@@ -23,33 +23,29 @@ import com.edu.xogame.database.DBManager;
 import com.edu.xogame.database.DatabaseHelper;
 
 public class GameHistoryActivity extends AppCompatActivity {
-    private DBManager dbManager;
-    private ListView listView;
-    private ItemAdapter cursorAdapter;
-    private final String[] from = {DatabaseHelper._ID, DatabaseHelper.BOARDGAME, DatabaseHelper.RESULT, DatabaseHelper.OPPONENT};
-    private final int[] to = {R.id.id, R.id.boardGame, R.id.result, R.id.opponent };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        listView = findViewById(R.id.listView);
-
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(this.LAYOUT_INFLATER_SERVICE);
-        View headerView = inflater.inflate(R.layout.listview_header, null, false);
-        listView.addHeaderView(headerView);//Add view to list view as header view
-
+        ListView listView = findViewById(R.id.listView);
         listView.setEmptyView(findViewById(R.id.empty));
+        listView.addHeaderView(new View(this), null, true);
 
-        dbManager = new DBManager(this);
+        DBManager dbManager = new DBManager(this);
         dbManager.open();
         Cursor cursor = dbManager.fetch();
+        int numberOfGameWin = dbManager.getNumberOfGameWin();
+        int numberOfGameLose = dbManager.getNumberOfGameLose();
         dbManager.close();
 
-        Log.e("<<H>>", "onCreate call ...");
+        TextView gameCounter = findViewById(R.id.gameCounter);
 
-        cursorAdapter = new ItemAdapter(this, cursor);
+        gameCounter.setText("Số trận thắng/thua: " + numberOfGameWin + "/" + numberOfGameLose);
+
+
+        ItemAdapter cursorAdapter = new ItemAdapter(this, cursor);
         cursorAdapter.notifyDataSetChanged();
         listView.setAdapter(cursorAdapter);
 

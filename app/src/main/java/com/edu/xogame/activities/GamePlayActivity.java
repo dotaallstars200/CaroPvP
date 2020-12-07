@@ -55,7 +55,6 @@ public class GamePlayActivity extends AppCompatActivity {
         if (intent.hasExtra("BoardGame")) {
             setContentView(R.layout.activity_main_player);
             boardGame = intent.getStringExtra("BoardGame");
-            Log.e("<<BOARDGAME>>", boardGame);
             boardGame = boardGame.replace("[","").replace("]","");
             String numbers[] = boardGame.split(", ");
 
