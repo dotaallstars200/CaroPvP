@@ -50,7 +50,6 @@ public class Game {
     public void show() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
-        Log.e("<<BOARDGAMESHOW>>", Arrays.deepToString(board.getTrackTable()));
     }
 
     public void endGame(String result, boolean showDialog) {
@@ -76,10 +75,10 @@ public class Game {
             }
 
             // Lưu kết quả trận đấu
-            if (result.equals("YOU WIN THE GAME!!!")) {
+            if (result.equals("YOU")) {
                 resultToStore = "Thắng";
             }
-            else if (result.equals("OPPONENT WIN THE GAME!!!")) {
+            else if (result.equals("OPPONENT")) {
                 resultToStore = "Thua";
             }
             else if (result.equals("DRAW!!!")) {

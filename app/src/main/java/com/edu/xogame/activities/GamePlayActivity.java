@@ -42,11 +42,7 @@ public class GamePlayActivity extends AppCompatActivity {
         if (intent.hasExtra("BoardGame")) {
             boardGame = intent.getStringExtra("BoardGame");
             boardGame = boardGame.replace("[","").replace("]","");
-
-            Log.e("<<BoardGame>>", boardGame);
             String numbers[] = boardGame.split(", ");
-
-            Log.e("<<NUMBER>>", String.valueOf(numbers.length));
 
             int boardGameArray[][] = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
 
