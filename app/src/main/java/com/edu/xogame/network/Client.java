@@ -1,7 +1,5 @@
 package com.edu.xogame.network;
 
-import android.os.Handler;
-
 import com.edu.xogame.IFunction;
 import com.edu.xogame.players.RealPlayer;
 
@@ -29,12 +27,29 @@ public class Client extends Thread {
         this.startActivity = startActivity;
     }
 
+    public void startGame() {
+        startActivity.execute();
+    }
+
     @Override
     public void run() {
         try {
             socket.connect(new InetSocketAddress(hostAddress, PORT));
             player = new RealPlayer(socket);
-            startActivity.execute();
+            player = new RealPlayer(socket);
+            Thread thread = new Thread(player);
+            thread.start();
+            player.sendInvite();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void kill() {
+        try {
+            socket.close();
+            player.kill();
         } catch (IOException e) {
             e.printStackTrace();
         }

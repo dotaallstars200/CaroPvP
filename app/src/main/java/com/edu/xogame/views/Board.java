@@ -1,6 +1,7 @@
 package com.edu.xogame.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -9,23 +10,25 @@ import com.edu.xogame.Game;
 import com.edu.xogame.datastructure.CellPosition;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 public class Board  {
 
-    public static final int NUMBER_COLUMNS = 50;
-    public static final int NUMBER_ROWS = 50;
+    public static final int NUMBER_COLUMNS = 25;
+    public static final int NUMBER_ROWS = 25;
 
     private final TableLayout tableLayout;
     private final int[][] trackTable;
     private final HashMap<Integer, Cell> checkedCells;
     private final HashMap<Integer, Cell> cells;
     private final Game game;
-
+    private Stack<Integer> num_order; // Thu tu xuat hien cac check tren ban co
     public Board(Context context, Game game) {
         trackTable = new int[NUMBER_ROWS][NUMBER_COLUMNS];
         tableLayout = new TableLayout(context);
         checkedCells = new HashMap<>();
         cells = new HashMap<>();
+        num_order = new Stack<>();
         createBoard(context);
         this.game = game;
     }
@@ -63,7 +66,6 @@ public class Board  {
                 trackTable[i][j] = boardGameArray[i][j];
             }
         }
-        return;
     }
 
     public void setCell(Context context) {
@@ -117,6 +119,7 @@ public class Board  {
             cell.check(Cell.X_IMAGE);
         }
         checkedCells.put(cell.hashCode(), cell);
+        num_order.push(cell.hashCode());
 
         // check if the game is draw
         if (checkedCells.size() == getTotalCells())
@@ -125,10 +128,24 @@ public class Board  {
         boolean gameResult = game.checkWin(cell.getCellPosition(), trackTable[rowPos][colPos], trackTable);
         if (gameResult) {
             String side = game.isMyTurn() ? "YOU" : "OPPONENT";
-            getGame().endGame(side + " WIN THE GAME!!!", true);
-
+            getGame().endGame(side , true);
         }
 
         game.changeTurn();
+    }
+
+    public void uncheckCell()
+    {
+        if (num_order.empty() || num_order.size() == 1)//Board empty
+            return;
+
+        Cell checkofBot = checkedCells.get(num_order.pop());
+        Cell checkofPlayer = checkedCells.get(num_order.pop());
+        checkofBot.uncheck();
+        checkofPlayer.uncheck();
+        // update trackTable
+        trackTable[checkofBot.getCellPosition().row][checkofBot.getCellPosition().column]=0;
+        trackTable[checkofPlayer.getCellPosition().row][checkofPlayer.getCellPosition().column]=0;
+
     }
 }
