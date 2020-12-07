@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -36,12 +38,16 @@ public class GamePlayActivity extends AppCompatActivity {
     private TextView tvP_Bot;
     private  int p_Player=0;// point of player
     private int p_Opponet=0;// point of opponet
-  
+    MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
+
+       mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.ring);
+       mediaPlayer.start();
 
         Intent intent = getIntent();
         String playingType = intent.getStringExtra("PlayType");
@@ -105,6 +111,7 @@ public class GamePlayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        mediaPlayer.stop();
     }
 
     @Override
