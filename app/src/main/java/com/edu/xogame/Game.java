@@ -93,6 +93,9 @@ public class Game {
             if (opponent instanceof PlayerBot) {
                 opponentToStore = "BOT";
             }
+            else {
+                opponentToStore = "PLAYER";
+            }
 
             dbManager = new DBManager(activity.getApplicationContext());
             dbManager.open();

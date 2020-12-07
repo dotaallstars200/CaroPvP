@@ -36,7 +36,7 @@ public class DBManager {
 
     public Cursor fetch() {
         String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.BOARDGAME, DatabaseHelper.RESULT, DatabaseHelper.OPPONENT };
-        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, DatabaseHelper._ID + " DESC");
         if (cursor != null) {
             cursor.moveToFirst();
         }

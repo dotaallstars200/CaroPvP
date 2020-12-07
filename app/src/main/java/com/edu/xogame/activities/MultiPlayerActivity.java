@@ -45,7 +45,7 @@ public class MultiPlayerActivity extends AppCompatActivity {
     private ListView listView;
     private IntentFilter intentFilter;
 
-    private List<WifiP2pDevice> peers = new ArrayList<>();
+    private final List<WifiP2pDevice> peers = new ArrayList<>();
     private String[] devicesNameArray;
     private WifiP2pDevice[] devicesArray;
     private boolean isHost;
