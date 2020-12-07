@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.INTERNET" android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:required="true"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 
     <application
@@ -18,8 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MultiPlayerActivity">
 
+        <activity android:name=".activities.MultiPlayerActivity">
         </activity>
         <activity android:name=".activities.MenuActivity">
             <intent-filter>
@@ -29,6 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GamePlayActivity" />
+        <activity android:name=".activities.GameHistoryActivity" />
     </application>
 
 </manifest>

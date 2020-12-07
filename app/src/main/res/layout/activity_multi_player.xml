@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"/>
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button"
         android:layout_width="wrap_content"
@@ -38,4 +39,5 @@
         android:layout_margin="24dp"
         app:backgroundTint="@color/colorPrimary"
         android:contentDescription="TODO" />
+
 </RelativeLayout>

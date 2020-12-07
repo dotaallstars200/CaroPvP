@@ -5,13 +5,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ProgressBar;
-
 import com.edu.xogame.activities.GamePlayActivity;
+import com.edu.xogame.database.DBManager;
+import com.edu.xogame.database.DatabaseHelper;
 import com.edu.xogame.activities.MultiPlayerActivity;
 import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.views.Board;
+
+import java.util.Arrays;
 
 
 public class Game {
@@ -30,13 +33,14 @@ public class Game {
         Thread myBackgroundThread;
 
 
+    private DBManager dbManager;
+
     public Game(Activity activity, boolean goFirst) {
         this.goFirst = goFirst;
         this.activity = activity;
         progressBar = activity.findViewById(R.id.progressBar);
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
-
     }
 
     public Player getOpponent() {
@@ -51,6 +55,11 @@ public class Game {
             if (!goFirst)
                 opponent.makeMove();
         }
+    }
+
+    public void show() {
+        HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
+        horizontalScrollView.addView(board.getTableLayout());
 
     }
     public void remake(){
@@ -61,7 +70,10 @@ public class Game {
         board.uncheckCell();
     }
     public void endGame(String result, boolean showDialog) {
+        String resultToStore = "";
+        String opponentToStore = "";
         isRunning = false;
+
         if (showDialog) {
 
             if (opponent instanceof PlayerBot) {
@@ -82,6 +94,34 @@ public class Game {
                         null, "OK", activity, null, negativeFunc);
                 MultiPlayerActivity.disconnect(activity);
             }
+
+            // Lưu kết quả trận đấu
+            if (result.equals("YOU")) {
+                resultToStore = "Thắng";
+            }
+            else if (result.equals("OPPONENT")) {
+                resultToStore = "Thua";
+            }
+            else if (result.equals("DRAW!!!")) {
+                resultToStore = "Hoà";
+            }
+            else {
+                result = "NONE";
+            }
+
+            // Lưu opponent
+            if (opponent instanceof PlayerBot) {
+                opponentToStore = "BOT";
+            }
+            else {
+                opponentToStore = "PLAYER";
+            }
+
+            dbManager = new DBManager(activity.getApplicationContext());
+            dbManager.open();
+            dbManager.insert(Arrays.deepToString(board.getTrackTable()), resultToStore, opponentToStore);
+            dbManager.close();
+
         } else {
             removeBoardFromActivity();
         }
@@ -113,13 +153,7 @@ public class Game {
         isTurnO = !isTurnO;
         sumProgress = 0;
         if (!isMyTurn() && opponent instanceof PlayerBot) {
-
             opponent.makeMove();
-
-
-
-           
-
         }
 
     }

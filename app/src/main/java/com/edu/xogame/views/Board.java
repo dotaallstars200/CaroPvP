@@ -60,6 +60,31 @@ public class Board  {
         return trackTable;
     }
 
+    public void setTrackTable(int[][] boardGameArray) {
+        for (int i = 0; i < NUMBER_ROWS; i++) {
+            for (int j = 0; j < NUMBER_COLUMNS; j++) {
+                trackTable[i][j] = boardGameArray[i][j];
+            }
+        }
+    }
+
+    public void setCell(Context context) {
+        Cell cell;
+        CellPosition cellPosition;
+        for (int i = 0; i < NUMBER_ROWS; i++) {
+            for (int j = 0; j < NUMBER_COLUMNS; j++) {
+                cellPosition = new CellPosition(i, j);
+                cell = cells.get(cellPosition.hashCode());
+                if (trackTable[i][j] == 1) {
+                    cell.check(Cell.O_IMAGE);
+                }
+                else if (trackTable[i][j] == -1){
+                    cell.check(Cell.X_IMAGE);
+                }
+            }
+        }
+    }
+
     public HashMap<Integer, Cell> getCheckedCells() {
         return checkedCells;
     }
@@ -108,6 +133,7 @@ public class Board  {
 
         game.changeTurn();
     }
+
     public void uncheckCell()
     {
         if (num_order.empty() || num_order.size() == 1)//Board empty
@@ -122,5 +148,4 @@ public class Board  {
         trackTable[checkofPlayer.getCellPosition().row][checkofPlayer.getCellPosition().column]=0;
 
     }
-
 }

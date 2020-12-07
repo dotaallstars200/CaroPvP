@@ -8,16 +8,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.TextView;
-
 import android.widget.Toast;
 
 import com.edu.xogame.Game;
@@ -26,6 +24,11 @@ import com.edu.xogame.Utilities;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.players.RealPlayer;
+import com.edu.xogame.views.Board;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class GamePlayActivity extends AppCompatActivity {
     private Context context;
@@ -43,35 +46,57 @@ public class GamePlayActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
 
+        String playingType;
+        boolean goFirst;
+        String boardGame;
+
         Intent intent = getIntent();
-        String playingType = intent.getStringExtra("PlayType");
-        boolean goFirst = intent.getBooleanExtra("GoFirst", true);
-        Player player;
-        if (playingType.equals("Bot")) {
-            player = new PlayerBot();
-            setContentView(R.layout.activity_main_bot);
-            btnNewGame= findViewById(R.id.btnNewGame);
-            btnUndo= findViewById(R.id.btnUndo);
-            btnNewGame.setOnClickListener(v -> {
-                game.remake();
-            });
-            btnUndo.setOnClickListener(v -> {
-                game.undo();
-            });
+
+        if (intent.hasExtra("BoardGame")) {
+            setContentView(R.layout.activity_main_player);
+            boardGame = intent.getStringExtra("BoardGame");
+            Log.e("<<BOARDGAME>>", boardGame);
+            boardGame = boardGame.replace("[","").replace("]","");
+            String numbers[] = boardGame.split(", ");
+
+            int boardGameArray[][] = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
+
+            for (int i = 0; i < Board.NUMBER_ROWS; i++) {
+                for (int j = 0; j < Board.NUMBER_COLUMNS; j++) {
+                    boardGameArray[i][j] = Integer.parseInt(numbers[i * Board.NUMBER_COLUMNS + j]);
+                }
+            }
+            showGameHistory(boardGameArray);
         }
         else {
-            setContentView(R.layout.activity_main_player);
-            RealPlayer realPlayer;
-            if (Utilities.CLIENT != null) {
-                realPlayer = Utilities.CLIENT.getPlayer();
-            } else if (Utilities.HOST != null) {
-                realPlayer = Utilities.HOST.getPlayer();
-            } else realPlayer = null;
+            playingType = intent.getStringExtra("PlayType");
+            goFirst = intent.getBooleanExtra("GoFirst", true);
+            Player player;
+            if (playingType.equals("Bot")) {
+                player = new PlayerBot();
+                setContentView(R.layout.activity_main_bot);
+                btnNewGame= findViewById(R.id.btnNewGame);
+                btnUndo= findViewById(R.id.btnUndo);
+                btnNewGame.setOnClickListener(v -> {
+                    game.remake();
+                });
+                btnUndo.setOnClickListener(v -> {
+                    game.undo();
+                });
+            }
+            else {
+                setContentView(R.layout.activity_main_player);
+                RealPlayer realPlayer;
+                if (Utilities.CLIENT != null) {
+                    realPlayer = Utilities.CLIENT.getPlayer();
+                } else if (Utilities.HOST != null) {
+                    realPlayer = Utilities.HOST.getPlayer();
+                } else realPlayer = null;
 
-            player = realPlayer;
+                player = realPlayer;
+            }
+            newGame(goFirst, player);
         }
-
-        newGame(goFirst, player);
 
     }
     @SuppressLint("SetTextI18n")
@@ -98,6 +123,13 @@ public class GamePlayActivity extends AppCompatActivity {
         game.setOpponent(player);
         player.setBoard(game.getBoard());
         game.start();
+    }
+
+    public void showGameHistory(int[][] boardGameArray) {
+        game = new Game(this, false);
+        game.getBoard().setTrackTable(boardGameArray);
+        game.getBoard().setCell(this.getApplicationContext());
+        game.show();
     }
 
     @Override
