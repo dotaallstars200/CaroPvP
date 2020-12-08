@@ -1,6 +1,7 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -30,6 +31,7 @@ public class Game {
         int sumProgress = 0;
         int maxValue = 10;
         public boolean isRunning;
+        public boolean isPause;
         Thread myBackgroundThread;
 
 
@@ -41,6 +43,7 @@ public class Game {
         progressBar = activity.findViewById(R.id.progressBar);
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
+        isPause = false;
     }
 
     public Player getOpponent() {
@@ -268,6 +271,12 @@ public class Game {
             for (sumProgress = 0; sumProgress < maxValue; sumProgress += PROGRESS_STEP) {
                 if (!isRunning)
                     return;
+
+                while (isPause) {
+                    if (!isRunning)
+                        return;
+                    Log.e("isPause", "Pause");
+                }
 
                 Thread.sleep(1000);
                 Utilities.HANDLER.post(foregroundRunnable);

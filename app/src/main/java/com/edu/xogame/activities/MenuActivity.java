@@ -43,17 +43,14 @@ public class MenuActivity extends AppCompatActivity {
         btnExit.startAnimation(bounce);
 
         // animation của từng nút
-        btnPlayWithBot.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_UP)
-                {
-                    btnPlayWithBot.startAnimation(scale_down);
-                }else if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    btnPlayWithBot.startAnimation(scale_up);
-                }
-                return false;
+        btnPlayWithBot.setOnTouchListener((v, event) -> {
+            if(event.getAction()==MotionEvent.ACTION_UP)
+            {
+                btnPlayWithBot.startAnimation(scale_down);
+            }else if(event.getAction()==MotionEvent.ACTION_DOWN){
+                btnPlayWithBot.startAnimation(scale_up);
             }
+            return false;
         });
 
 
@@ -67,16 +64,13 @@ public class MenuActivity extends AppCompatActivity {
         });
 
 
-        btnHistory.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    btnHistory.startAnimation(scale_down);
-                }else if (event.getAction()==MotionEvent.ACTION_DOWN){
-                    btnHistory.startAnimation(scale_up);
-                }
-                return false;
+        btnHistory.setOnTouchListener((v, event) -> {
+            if(event.getAction()==MotionEvent.ACTION_UP){
+                btnHistory.startAnimation(scale_down);
+            }else if (event.getAction()==MotionEvent.ACTION_DOWN){
+                btnHistory.startAnimation(scale_up);
             }
+            return false;
         });
 
         btnHistory.setOnClickListener(v -> {
@@ -86,16 +80,13 @@ public class MenuActivity extends AppCompatActivity {
 
 
 
-        btnExit.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    btnExit.startAnimation(scale_down);
-                }else if (event.getAction()==MotionEvent.ACTION_DOWN){
-                    btnExit.startAnimation(scale_up);
-                }
-                return false;
+        btnExit.setOnTouchListener((v, event) -> {
+            if(event.getAction()==MotionEvent.ACTION_UP){
+                btnExit.startAnimation(scale_down);
+            }else if (event.getAction()==MotionEvent.ACTION_DOWN){
+                btnExit.startAnimation(scale_up);
             }
+            return false;
         });
 
 
@@ -103,16 +94,13 @@ public class MenuActivity extends AppCompatActivity {
             System.exit(0);
         });
 
-        btnPlayWithFriend.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    btnPlayWithFriend.startAnimation(scale_down);
-                }else if(event.getAction()==MotionEvent.ACTION_DOWN){
-                    btnPlayWithFriend.startAnimation(scale_up);
-                }
-                return false;
+        btnPlayWithFriend.setOnTouchListener((v, event) -> {
+            if(event.getAction()==MotionEvent.ACTION_UP){
+                btnPlayWithFriend.startAnimation(scale_down);
+            }else if(event.getAction()==MotionEvent.ACTION_DOWN){
+                btnPlayWithFriend.startAnimation(scale_up);
             }
+            return false;
         });
         btnPlayWithFriend.setOnClickListener(v -> {
             Intent intent = new Intent(this, MultiPlayerActivity.class);

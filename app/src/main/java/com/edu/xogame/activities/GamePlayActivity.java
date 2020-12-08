@@ -56,9 +56,9 @@ public class GamePlayActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main_player);
             boardGame = intent.getStringExtra("BoardGame");
             boardGame = boardGame.replace("[","").replace("]","");
-            String numbers[] = boardGame.split(", ");
+            String[] numbers = boardGame.split(", ");
 
-            int boardGameArray[][] = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
+            int[][] boardGameArray = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
 
             for (int i = 0; i < Board.NUMBER_ROWS; i++) {
                 for (int j = 0; j < Board.NUMBER_COLUMNS; j++) {
@@ -135,14 +135,14 @@ public class GamePlayActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (game.getOpponent() instanceof PlayerBot)
-            game.isRunning = false;
+            game.isPause = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (game.getOpponent() instanceof PlayerBot)
-            game.isRunning = true;
+            game.isPause = false;
     }
 
     @Override
