@@ -123,12 +123,12 @@ public class Board  {
 
         // check if the game is draw
         if (checkedCells.size() == getTotalCells())
-            getGame().endGame("DRAW!!!", true);
+            getGame().endGame("Hoà", true);
 
         boolean gameResult = game.checkWin(cell.getCellPosition(), trackTable[rowPos][colPos], trackTable);
         if (gameResult) {
-            String side = game.isMyTurn() ? "YOU" : "OPPONENT";
-            getGame().endGame(side , true);
+            String side = game.isMyTurn() ? "Bạn" : "Đối thủ";
+            getGame().endGame(side + " đã thắng.", true);
         }
 
         game.changeTurn();

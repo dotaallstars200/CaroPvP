@@ -3,20 +3,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#AAA5A5"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/imgHeader"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:src="@drawable/folder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/header_history"
+            android:id="@+id/headerText"
+            android:textSize="20sp"
+            android:layout_marginStart="10dp"
+            tools:ignore="RtlSymmetry"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/gameCounter"
+        android:paddingStart="30dp"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
+        tools:ignore="RtlSymmetry" />
+
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView"
-        >
+        android:headerDividersEnabled="true">
 
     </ListView>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No content"
-        android:id="@+id/empty"/>
+        android:text="Chưa có lịch sử đấu"
+        android:id="@+id/empty"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:paddingStart="30dp"
+        tools:ignore="RtlSymmetry" />
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.edu.xogame;
 
 import android.app.Activity;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -33,7 +32,6 @@ public class Game {
         public boolean isRunning;
         Thread myBackgroundThread;
 
-        MediaPlayer player;
 
     private DBManager dbManager;
 
@@ -74,8 +72,6 @@ public class Game {
     public void endGame(String result, boolean showDialog) {
         String resultToStore = "";
         String opponentToStore = "";
-        player = MediaPlayer.create(this.activity, R.raw.votay);
-        player.start();
         isRunning = false;
 
         if (showDialog) {
@@ -88,8 +84,6 @@ public class Game {
                 };
 
                 IFunction negativeFunc = activity::finish;
-
-
 
                 Utilities.createDialog(result, "Do you want to play a new game?",
                         "YES", "NO", activity, positiveFunc, negativeFunc);
@@ -259,9 +253,7 @@ public class Game {
                     isRunning=false;
                     if (isMyTurn()) {
                         endGame("Đối phương đã thắng",true);
-
                     } else {
-
                         endGame("Bạn đã thắng",true);
                     }
                 }

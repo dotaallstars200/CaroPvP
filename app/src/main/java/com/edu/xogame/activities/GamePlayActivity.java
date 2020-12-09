@@ -59,7 +59,6 @@ public class GamePlayActivity extends AppCompatActivity {
         if (intent.hasExtra("BoardGame")) {
             setContentView(R.layout.activity_main_player);
             boardGame = intent.getStringExtra("BoardGame");
-            Log.e("<<BOARDGAME>>", boardGame);
             boardGame = boardGame.replace("[","").replace("]","");
             String numbers[] = boardGame.split(", ");
 
@@ -108,7 +107,7 @@ public class GamePlayActivity extends AppCompatActivity {
         tvP_Bot= findViewById(R.id.point_bot);
         tvP_Human= findViewById(R.id.point_human);
 
-        if (result.equals("YOU")) {
+        if (result.equals("Bạn đã thắng.")) {
             p_Player+=1;
             tvP_Human.setText(String.valueOf(p_Player));
         }
