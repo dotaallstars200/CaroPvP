@@ -1,6 +1,7 @@
 package com.edu.xogame;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -32,6 +33,7 @@ public class Game {
         public boolean isRunning;
         Thread myBackgroundThread;
 
+        MediaPlayer mediaPlayer;
 
     private DBManager dbManager;
 
@@ -73,6 +75,9 @@ public class Game {
         String resultToStore = "";
         String opponentToStore = "";
         isRunning = false;
+
+        mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
+        mediaPlayer.start();
 
         if (showDialog) {
 
