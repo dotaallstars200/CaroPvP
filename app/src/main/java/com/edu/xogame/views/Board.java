@@ -81,8 +81,11 @@ public class Board  {
                 else if (trackTable[i][j] == -1){
                     cell.check(Cell.X_IMAGE);
                 }
+                checkedCells.put(cell.hashCode(), cell);
+                num_order.push(cell.hashCode());
             }
         }
+
     }
 
     public HashMap<Integer, Cell> getCheckedCells() {
@@ -123,7 +126,7 @@ public class Board  {
 
         // check if the game is draw
         if (checkedCells.size() == getTotalCells())
-            getGame().endGame("Hoà", true);
+            getGame().endGame("Hoà.", true);
 
         boolean gameResult = game.checkWin(cell.getCellPosition(), trackTable[rowPos][colPos], trackTable);
         if (gameResult) {
@@ -135,6 +138,7 @@ public class Board  {
     }
     public void checkCellWin()
     {
+        Log.e("<<NUM_ORDER>>", num_order.toString());
         if (num_order.empty() || num_order.size() == 1)//Board empty
             return;
         Cell tempCell;
@@ -156,6 +160,8 @@ public class Board  {
                 }
             }
         }
+
+
     }
 
     public void uncheckCell()

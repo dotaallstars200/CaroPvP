@@ -47,9 +47,6 @@ public class GamePlayActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
 
-
-
-
         String playingType;
         boolean goFirst;
         String boardGame;
@@ -57,7 +54,7 @@ public class GamePlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra("BoardGame")) {
-            setContentView(R.layout.activity_main_player);
+            setContentView(R.layout.activity_show_history);
             boardGame = intent.getStringExtra("BoardGame");
             boardGame = boardGame.replace("[","").replace("]","");
             String numbers[] = boardGame.split(", ");
@@ -111,8 +108,8 @@ public class GamePlayActivity extends AppCompatActivity {
             p_Player+=1;
             tvP_Human.setText(String.valueOf(p_Player));
         }
-        else{
-             p_Opponet+=1;
+        else if (result.equals("Đối thủ đã thắng.")){
+            p_Opponet+=1;
             tvP_Bot.setText(String.valueOf(p_Opponet));
         }
     }
@@ -132,6 +129,7 @@ public class GamePlayActivity extends AppCompatActivity {
         game = new Game(this, false);
         game.getBoard().setTrackTable(boardGameArray);
         game.getBoard().setCell(this.getApplicationContext());
+        game.getBoard().checkCellWin();
         game.show();
     }
 

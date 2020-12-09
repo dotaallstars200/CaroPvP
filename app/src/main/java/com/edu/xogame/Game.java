@@ -93,8 +93,8 @@ public class Game {
 
                 IFunction negativeFunc = activity::finish;
 
-                Utilities.createDialog(result, "Do you want to play a new game?",
-                        "YES", "NO", activity, positiveFunc, negativeFunc);
+                Utilities.createDialog(result, "Bạn có muốn bắt đầu game mới không?",
+                        "Đồng Ý", "Không", activity, positiveFunc, negativeFunc);
                 ((GamePlayActivity)(activity)).updatePoint(result);
             } else {
                 IFunction negativeFunc = activity::finish;
@@ -104,17 +104,17 @@ public class Game {
             }
 
             // Lưu kết quả trận đấu
-            if (result.equals("YOU")) {
+            if (result.equals("Bạn đã thắng.")) {
                 resultToStore = "Thắng";
             }
-            else if (result.equals("OPPONENT")) {
+            else if (result.equals("Đối thủ đã thắng.")) {
                 resultToStore = "Thua";
             }
-            else if (result.equals("DRAW!!!")) {
+            else if (result.equals("Hoà.")) {
                 resultToStore = "Hoà";
             }
             else {
-                result = "NONE";
+                resultToStore = "NONE";
             }
 
             // Lưu opponent
@@ -260,9 +260,9 @@ public class Game {
                     progressBar.setVisibility(View.INVISIBLE);
                     isRunning=false;
                     if (isMyTurn()) {
-                        endGame("Đối phương đã thắng",true);
+                        endGame("Đối thủ đã thắng.",true);
                     } else {
-                        endGame("Bạn đã thắng",true);
+                        endGame("Bạn đã thắng.",true);
                     }
                 }
             } catch (Exception e) {
