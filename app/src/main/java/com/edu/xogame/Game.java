@@ -75,10 +75,14 @@ public class Game {
         String resultToStore = "";
         String opponentToStore = "";
         isRunning = false;
+<<<<<<< HEAD
 
         mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
         mediaPlayer.start();
 
+=======
+        board.checkCellWin(); // To mau cac o chien thang
+>>>>>>> 798f33ee6c8a33fd3b22283dfcddaa07e09acd0a
         if (showDialog) {
 
             if (opponent instanceof PlayerBot) {

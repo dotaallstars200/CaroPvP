@@ -1,5 +1,6 @@
 package com.edu.xogame.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ import com.edu.xogame.database.DatabaseHelper;
 
 public class GameHistoryActivity extends AppCompatActivity {
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

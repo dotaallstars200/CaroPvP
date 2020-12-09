@@ -88,7 +88,7 @@
     <LinearLayout
         android:id="@+id/board"
         android:layout_width="match_parent"
-        android:layout_height="520dp"
+        android:layout_height="450dp"
         android:layout_below="@+id/info"
 
         >
@@ -127,7 +127,12 @@
             android:layout_height="58dp"
             android:layout_alignParentRight="true"
             android:drawableLeft="@drawable/newgame_foreground"
-            android:gravity="left"
+            android:text="Remake"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
+
+            android:gravity="center_vertical"
             android:backgroundTint="#344955"
             />
 
@@ -136,8 +141,12 @@
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:backgroundTint="#344955"
+            android:text="Undo"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="20dp"
             android:drawableLeft="@drawable/undo_foreground"
-            android:gravity="left" />
+            android:gravity="center_vertical|left" />
 
     </RelativeLayout>
     </LinearLayout>
