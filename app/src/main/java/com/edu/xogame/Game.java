@@ -73,7 +73,7 @@ public class Game {
         String resultToStore = "";
         String opponentToStore = "";
         isRunning = false;
-
+        board.checkCellWin(); // To mau cac o chien thang
         if (showDialog) {
 
             if (opponent instanceof PlayerBot) {

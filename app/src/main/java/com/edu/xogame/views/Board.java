@@ -133,6 +133,30 @@ public class Board  {
 
         game.changeTurn();
     }
+    public void checkCellWin()
+    {
+        if (num_order.empty() || num_order.size() == 1)//Board empty
+            return;
+        Cell tempCell;
+        boolean testResult;
+        int rowPos;
+        int colPos;
+        for(;!num_order.empty();)
+        {
+            tempCell=checkedCells.get(num_order.pop());
+            rowPos=tempCell.getCellPosition().row;
+            colPos=tempCell.getCellPosition().column;
+            testResult=game.checkWin(tempCell.getCellPosition(),trackTable[rowPos][colPos],trackTable);
+            if(testResult){
+                if (trackTable[rowPos][colPos] ==  1) {
+                    tempCell.check(Cell.O_Win_IMAGE);
+                } else if (trackTable[rowPos][colPos] ==  -1)
+                {
+                    tempCell.check(Cell.X_Win_IMAGE);
+                }
+            }
+        }
+    }
 
     public void uncheckCell()
     {
