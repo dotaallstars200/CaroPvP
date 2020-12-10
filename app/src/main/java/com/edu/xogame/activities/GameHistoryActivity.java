@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -34,11 +35,15 @@ public class GameHistoryActivity extends AppCompatActivity {
 
     Handler myHandler = new Handler();
 
+    MediaPlayer mediaPlayer;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        mediaPlayer = MediaPlayer.create(this.getApplicationContext(),R.raw.ring);
 
         listView = findViewById(R.id.listView);
         listView.setEmptyView(findViewById(R.id.empty));
@@ -89,4 +94,16 @@ public class GameHistoryActivity extends AppCompatActivity {
             myHandler.post(foregroundRunnable);
         }// run
     };// backgroundTask
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        mediaPlayer.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.stop();
+    }
 }

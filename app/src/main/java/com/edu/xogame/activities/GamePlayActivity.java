@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.HorizontalScrollView;
@@ -33,11 +34,15 @@ public class GamePlayActivity extends AppCompatActivity {
     private  int p_Player=0;// point of player
     private int p_Opponet=0;// point of opponet
 
+    MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
+
+        mediaPlayer = MediaPlayer.create(this.getApplicationContext(),R.raw.ring);
 
         String playingType;
         boolean goFirst;
@@ -138,11 +143,13 @@ public class GamePlayActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        mediaPlayer.stop();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
+        mediaPlayer.start();
         super.onResume();
     }
 

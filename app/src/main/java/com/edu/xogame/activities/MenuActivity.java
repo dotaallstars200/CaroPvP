@@ -47,7 +47,7 @@ public class MenuActivity extends AppCompatActivity {
         btnExit.startAnimation(bounce);
 
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.ring);
-        mediaPlayer.start();
+
         mediaPlayer1 = MediaPlayer.create(getApplicationContext(),R.raw.click);
 
         // animation của từng nút
@@ -130,5 +130,17 @@ public class MenuActivity extends AppCompatActivity {
             dialog.dismiss();
             dialog = null;
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        mediaPlayer.start();
+        super.onPostResume();
+    }
+
+    @Override
+    protected void onPause() {
+       mediaPlayer.stop();
+        super.onPause();
     }
 }
