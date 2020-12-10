@@ -107,9 +107,11 @@ public class Board {
         if (game.isTurnO()) {
             trackTable[rowPos][colPos] = 1;
             cell.check(Cell.O_IMAGE);
+            game.SetTurnPlay(false);
         } else {
             trackTable[rowPos][colPos] = -1;
             cell.check(Cell.X_IMAGE);
+            game.SetTurnPlay(true);
         }
         checkedCells.put(cell.hashCode(), cell);
         num_order.push(cell.hashCode());

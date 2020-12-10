@@ -29,6 +29,7 @@ public class GamePlayActivity extends AppCompatActivity {
     private Button btnUndo;
     private TextView tvP_Human;
     private TextView tvP_Bot;
+    private TextView tv_TurnPlay;
     private  int p_Player=0;// point of player
     private int p_Opponet=0;// point of opponet
 
@@ -104,7 +105,13 @@ public class GamePlayActivity extends AppCompatActivity {
             tvP_Bot.setText(String.valueOf(p_Opponet));
         }
     }
-
+    public void updateTurn(boolean isTurnO){
+        tv_TurnPlay=findViewById(R.id.tvTurnOf);
+        if(isTurnO)
+            tv_TurnPlay.setText("Turn of O");
+        else
+            tv_TurnPlay.setText("Turn of X");
+    }
 
     public void newGame(boolean goFirst, Player player) {
         if (game != null)

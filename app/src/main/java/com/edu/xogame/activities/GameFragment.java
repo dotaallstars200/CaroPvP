@@ -1,5 +1,6 @@
 package com.edu.xogame.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -224,7 +225,10 @@ public class GameFragment extends Fragment {
         }
 
     }
-
+    @SuppressLint("SetTextI18n")
+    public void SetTurnPlay(boolean isTurnO){
+        ((GamePlayActivity) (activity)).updateTurn(isTurnO);
+    }
     public boolean checkWin(CellPosition anchor, int sideChecking, int[][] trackTable) {
 
         int onSameAxis = 0;
