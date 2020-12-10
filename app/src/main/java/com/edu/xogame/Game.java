@@ -49,6 +49,14 @@ public class Game {
         return opponent;
     }
 
+    public void soundWin(){
+        mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
+        mediaPlayer.start();
+    }
+    public void soundLose(){
+        mediaPlayer = MediaPlayer.create(this.activity,R.raw.tiengoh);
+        mediaPlayer.start();
+    }
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
@@ -76,38 +84,18 @@ public class Game {
         String opponentToStore = "";
         isRunning = false;
 
-        mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
-        mediaPlayer.start();
-
 
         board.checkCellWin(); // To mau cac o chien thang
 
         if (showDialog) {
 
-            if (opponent instanceof PlayerBot) {
-
-                IFunction positiveFunc = () -> {
-                    removeBoardFromActivity();
-                    ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
-                };
-
-                IFunction negativeFunc = activity::finish;
-
-                Utilities.createDialog(result, "Bạn có muốn bắt đầu game mới không?",
-                        "Đồng Ý", "Không", activity, positiveFunc, negativeFunc);
-                ((GamePlayActivity)(activity)).updatePoint(result);
-            } else {
-                IFunction negativeFunc = activity::finish;
-                Utilities.createDialog(result, "Bấm ok để thoát!",
-                        null, "OK", activity, null, negativeFunc);
-                MultiPlayerActivity.disconnect(activity);
-            }
-
             // Lưu kết quả trận đấu
             if (result.equals("Bạn đã thắng.")) {
+                soundWin();
                 resultToStore = "Thắng";
             }
             else if (result.equals("Đối thủ đã thắng.")) {
+                soundLose();
                 resultToStore = "Thua";
             }
             else if (result.equals("Hoà.")) {
@@ -129,6 +117,25 @@ public class Game {
             dbManager.open();
             dbManager.insert(Arrays.deepToString(board.getTrackTable()), resultToStore, opponentToStore);
             dbManager.close();
+
+            if (opponent instanceof PlayerBot) {
+
+                IFunction positiveFunc = () -> {
+                    removeBoardFromActivity();
+                    ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
+                };
+
+                IFunction negativeFunc = activity::finish;
+
+                Utilities.createDialog(result, "Bạn có muốn bắt đầu game mới không?",
+                        "Đồng Ý", "Không", activity, positiveFunc, negativeFunc);
+                ((GamePlayActivity)(activity)).updatePoint(result);
+            } else {
+                IFunction negativeFunc = activity::finish;
+                Utilities.createDialog(result, "Bấm ok để thoát!",
+                        null, "OK", activity, null, negativeFunc);
+                MultiPlayerActivity.disconnect(activity);
+            }
 
         } else {
             removeBoardFromActivity();
