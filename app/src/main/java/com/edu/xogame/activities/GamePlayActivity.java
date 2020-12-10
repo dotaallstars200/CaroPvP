@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -39,7 +40,7 @@ public class GamePlayActivity extends AppCompatActivity {
     private TextView tvP_Bot;
     private  int p_Player=0;// point of player
     private int p_Opponet=0;// point of opponet
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class GamePlayActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent.hasExtra("BoardGame")) {
-            setContentView(R.layout.activity_main_player);
+            setContentView(R.layout.activity_show_history);
             boardGame = intent.getStringExtra("BoardGame");
             boardGame = boardGame.replace("[","").replace("]","");
             String[] numbers = boardGame.split(", ");
@@ -107,8 +108,8 @@ public class GamePlayActivity extends AppCompatActivity {
             p_Player+=1;
             tvP_Human.setText(String.valueOf(p_Player));
         }
-        else{
-             p_Opponet+=1;
+        else if (result.equals("Đối thủ đã thắng.")){
+            p_Opponet+=1;
             tvP_Bot.setText(String.valueOf(p_Opponet));
         }
     }
@@ -128,6 +129,7 @@ public class GamePlayActivity extends AppCompatActivity {
         game = new Game(this, false);
         game.getBoard().setTrackTable(boardGameArray);
         game.getBoard().setCell(this.getApplicationContext());
+        game.getBoard().checkCellWin();
         game.show();
     }
 

@@ -7,7 +7,9 @@ import com.edu.xogame.Utilities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.GetChars;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +21,8 @@ public class MenuActivity extends AppCompatActivity {
     private Button btnExit, btnPlayWithBot, btnPlayWithFriend, btnHistory;
     private ProgressDialog dialog;
     Animation scale_up, scale_down,bounce;
+    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer1;
     private static String TAG = "MenuActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,10 @@ public class MenuActivity extends AppCompatActivity {
         btnHistory.startAnimation(bounce);
         btnExit.startAnimation(bounce);
 
+        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.ring);
+        mediaPlayer.start();
+        mediaPlayer1 = MediaPlayer.create(getApplicationContext(),R.raw.click);
+
         // animation của từng nút
         btnPlayWithBot.setOnTouchListener((v, event) -> {
             if(event.getAction()==MotionEvent.ACTION_UP)
@@ -55,6 +63,9 @@ public class MenuActivity extends AppCompatActivity {
 
 
         btnPlayWithBot.setOnClickListener(v -> {
+
+           mediaPlayer1.start();
+
             Intent intent = new Intent(this, GamePlayActivity.class);
             dialog = ProgressDialog.show(this, "",
                     "Đang tải...", true);
@@ -76,6 +87,7 @@ public class MenuActivity extends AppCompatActivity {
         btnHistory.setOnClickListener(v -> {
            Intent intent = new Intent(this, GameHistoryActivity.class);
            startActivity(intent);
+            mediaPlayer1.start();
         });
 
 
@@ -91,6 +103,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         btnExit.setOnClickListener(v -> {
+            mediaPlayer1.start();
             System.exit(0);
         });
 
@@ -103,6 +116,7 @@ public class MenuActivity extends AppCompatActivity {
             return false;
         });
         btnPlayWithFriend.setOnClickListener(v -> {
+            mediaPlayer1.start();
             Intent intent = new Intent(this, MultiPlayerActivity.class);
             startActivity(intent);
         });

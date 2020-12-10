@@ -135,10 +135,9 @@
             android:id="@+id/btnUndo"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
-            android:drawableLeft="@drawable/undo_foreground"
-            android:gravity="left"
             android:backgroundTint="#344955"
-            />
+            android:drawableLeft="@drawable/undo_foreground"
+            android:gravity="left" />
 
     </RelativeLayout>
     </LinearLayout>

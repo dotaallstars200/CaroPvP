@@ -1,7 +1,7 @@
 package com.edu.xogame;
 
 import android.app.Activity;
-import android.os.Debug;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -31,9 +31,9 @@ public class Game {
         int sumProgress = 0;
         int maxValue = 10;
         public boolean isRunning;
-        public boolean isPause;
         Thread myBackgroundThread;
 
+        MediaPlayer mediaPlayer;
 
     private DBManager dbManager;
 
@@ -43,13 +43,20 @@ public class Game {
         progressBar = activity.findViewById(R.id.progressBar);
         board = new Board(activity.getApplicationContext(), this);
         isRunning = true;
-        isPause = false;
     }
 
     public Player getOpponent() {
         return opponent;
     }
 
+    public void soundWin(){
+        mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
+        mediaPlayer.start();
+    }
+    public void soundLose(){
+        mediaPlayer = MediaPlayer.create(this.activity,R.raw.tiengoh);
+        mediaPlayer.start();
+    }
     public void start() {
         HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
         horizontalScrollView.addView(board.getTableLayout());
@@ -77,7 +84,39 @@ public class Game {
         String opponentToStore = "";
         isRunning = false;
 
+
+        board.checkCellWin(); // To mau cac o chien thang
+
         if (showDialog) {
+
+            // Lưu kết quả trận đấu
+            if (result.equals("Bạn đã thắng.")) {
+                soundWin();
+                resultToStore = "Thắng";
+            }
+            else if (result.equals("Đối thủ đã thắng.")) {
+                soundLose();
+                resultToStore = "Thua";
+            }
+            else if (result.equals("Hoà.")) {
+                resultToStore = "Hoà";
+            }
+            else {
+                resultToStore = "NONE";
+            }
+
+            // Lưu opponent
+            if (opponent instanceof PlayerBot) {
+                opponentToStore = "BOT";
+            }
+            else {
+                opponentToStore = "PLAYER";
+            }
+
+            dbManager = new DBManager(activity.getApplicationContext());
+            dbManager.open();
+            dbManager.insert(Arrays.deepToString(board.getTrackTable()), resultToStore, opponentToStore);
+            dbManager.close();
 
             if (opponent instanceof PlayerBot) {
 
@@ -88,8 +127,8 @@ public class Game {
 
                 IFunction negativeFunc = activity::finish;
 
-                Utilities.createDialog(result, "Bạn có muốn chơi ván mới không ?",
-                        "Đồng ý", "Không", activity, positiveFunc, negativeFunc);
+                Utilities.createDialog(result, "Bạn có muốn bắt đầu game mới không?",
+                        "Đồng Ý", "Không", activity, positiveFunc, negativeFunc);
                 ((GamePlayActivity)(activity)).updatePoint(result);
             } else {
                 IFunction negativeFunc = activity::finish;
@@ -97,33 +136,6 @@ public class Game {
                         null, "OK", activity, null, negativeFunc);
                 MultiPlayerActivity.disconnect(activity);
             }
-
-            // Lưu kết quả trận đấu
-            if (result.equals("Bạn đã thắng.")) {
-                resultToStore = "Thắng";
-            }
-            else if (result.equals("Đối thủ đã thắng.")) {
-                resultToStore = "Thua";
-            }
-            else if (result.equals("DRAW!!!")) {
-                resultToStore = "Hoà";
-            }
-            else {
-                resultToStore = "NONE";
-            }
-
-            // Lưu opponent
-            if (opponent instanceof PlayerBot) {
-                opponentToStore = "Máy";
-            }
-            else {
-                opponentToStore = "Người chơi";
-            }
-
-            dbManager = new DBManager(activity.getApplicationContext());
-            dbManager.open();
-            dbManager.insert(Arrays.deepToString(board.getTrackTable()), resultToStore, opponentToStore);
-            dbManager.close();
 
         } else {
             removeBoardFromActivity();
@@ -271,12 +283,6 @@ public class Game {
             for (sumProgress = 0; sumProgress < maxValue; sumProgress += PROGRESS_STEP) {
                 if (!isRunning)
                     return;
-
-                while (isPause) {
-                    if (!isRunning)
-                        return;
-                    Log.e("isPause", "Pause");
-                }
 
                 Thread.sleep(1000);
                 Utilities.HANDLER.post(foregroundRunnable);
