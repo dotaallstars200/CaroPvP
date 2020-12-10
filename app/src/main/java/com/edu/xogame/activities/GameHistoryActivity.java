@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,13 @@ import com.edu.xogame.database.DBManager;
 import com.edu.xogame.database.DatabaseHelper;
 
 public class GameHistoryActivity extends AppCompatActivity {
+    Cursor cursor;
+    int numberOfGameWin, numberOfGameLose;
+    ListView listView;
+    TextView gameCounter;
+    ItemAdapter cursorAdapter;
+
+    Handler myHandler = new Handler();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -31,25 +40,11 @@ public class GameHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        ListView listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         listView.setEmptyView(findViewById(R.id.empty));
         listView.addHeaderView(new View(this), null, true);
 
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        Cursor cursor = dbManager.fetch();
-        int numberOfGameWin = dbManager.getNumberOfGameWin();
-        int numberOfGameLose = dbManager.getNumberOfGameLose();
-        dbManager.close();
-
-        TextView gameCounter = findViewById(R.id.gameCounter);
-
-        gameCounter.setText("Số trận thắng/thua: " + numberOfGameWin + "/" + numberOfGameLose);
-
-
-        ItemAdapter cursorAdapter = new ItemAdapter(this, cursor);
-        cursorAdapter.notifyDataSetChanged();
-        listView.setAdapter(cursorAdapter);
+        gameCounter = findViewById(R.id.gameCounter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,4 +57,36 @@ public class GameHistoryActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Thread myBackgroundThread = new Thread( backgroundTask, "backAlias1");
+        myBackgroundThread.start();
+    }
+
+    private Runnable foregroundRunnable = new Runnable() {
+        @Override
+        public void run() {
+            gameCounter.setText("Số trận thắng/thua: " + numberOfGameWin + "/" + numberOfGameLose);
+            cursorAdapter = new ItemAdapter(getApplicationContext(), cursor);
+            cursorAdapter.notifyDataSetChanged();
+            listView.setAdapter(cursorAdapter);
+            Log.e("<<COUNT CURSOR>>", "" + cursorAdapter.getCount());
+        }
+    };
+
+    private Runnable backgroundTask = new Runnable() {
+        @Override
+        public void run() {
+            DBManager dbManager = new DBManager(getApplicationContext());
+            dbManager.open();
+            cursor = dbManager.fetch();
+            numberOfGameWin = dbManager.getNumberOfGameWin();
+            numberOfGameLose = dbManager.getNumberOfGameLose();
+            dbManager.close();
+
+            myHandler.post(foregroundRunnable);
+        }// run
+    };// backgroundTask
 }
