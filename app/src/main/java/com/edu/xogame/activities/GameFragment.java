@@ -1,11 +1,27 @@
-package com.edu.xogame;
+package com.edu.xogame.activities;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.edu.xogame.IFunction;
+import com.edu.xogame.R;
+import com.edu.xogame.Utilities;
 import com.edu.xogame.activities.GamePlayActivity;
 import com.edu.xogame.database.DBManager;
 import com.edu.xogame.database.DatabaseHelper;
@@ -14,52 +30,95 @@ import com.edu.xogame.datastructure.CellPosition;
 import com.edu.xogame.players.Player;
 import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.views.Board;
+import com.edu.xogame.views.Cell;
 
 import java.util.Arrays;
 
 
-public class Game {
-        public static final int WIN_NUMBERS = 5;
-        private final boolean goFirst;
-        private Player opponent;
-        private final Board board;
-        private boolean isTurnO = true; // O always goes first
-        private final Activity activity;
-        ProgressBar progressBar;
-        private static final int MAX_PROGRESS = 100;
-        private static final int PROGRESS_STEP = 1;
-        int sumProgress = 0;
-        int maxValue = 10;
-        public boolean isRunning;
-        Thread myBackgroundThread;
-
-        MediaPlayer mediaPlayer;
-
+public class GameFragment extends Fragment {
+    public static final int WIN_NUMBERS = 5;
+    private final boolean goFirst;
+    private Player opponent;
+    private final Board board;
+    private boolean isTurnO = true; // O always goes first
+    private Activity activity;
+    ProgressBar progressBar;
+    private static final int MAX_PROGRESS = 100;
+    private static final int PROGRESS_STEP = 1;
+    int sumProgress = 0;
+    int maxValue = 10;
+    boolean isToPlay;
+    public boolean isRunning;
+    Thread myBackgroundThread;
+    MediaPlayer mediaPlayer;
     private DBManager dbManager;
 
-    public Game(Activity activity, boolean goFirst) {
+    public GameFragment(boolean goFirst, boolean isToPlay) {
         this.goFirst = goFirst;
-        this.activity = activity;
-        progressBar = activity.findViewById(R.id.progressBar);
-        board = new Board(activity.getApplicationContext(), this);
+        board = new Board(this);
         isRunning = true;
+        this.isToPlay = isToPlay;
     }
 
     public Player getOpponent() {
         return opponent;
     }
 
-    public void soundWin(){
-        mediaPlayer = MediaPlayer.create(this.activity,R.raw.votay);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Activities containing this fragment must implement interface: MainCallbacks
+
+        activity = getActivity();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        LinearLayout layout_menu = (LinearLayout) inflater.inflate(R.layout.layout_board, null );
+        progressBar = activity.findViewById(R.id.progressBar);
+        TableLayout tableLayout = layout_menu.findViewById(R.id.tableLayout);
+        tableLayout.removeAllViewsInLayout();
+
+        TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+
+        for (int i = 0; i < Board.NUMBER_ROWS; i++) {
+            TableRow tr = new TableRow(layout_menu.getContext());
+            tr.setLayoutParams(tableParams);
+
+            for (int j = 0; j < Board.NUMBER_COLUMNS; j++) {
+                Cell cell = new Cell(layout_menu.getContext(), board, new CellPosition(i, j));
+                board.getCells().put(cell.hashCode(), cell);
+                cell.setLayoutParams(rowParams);
+                tr.addView(cell);
+            }
+            tableLayout.addView(tr);
+        }
+        board.setTableLayout(tableLayout);
+        if (this.isToPlay)
+            start();
+        else
+            showHistory();
+        return layout_menu;
+    }
+
+    public void soundWin() {
+        mediaPlayer = MediaPlayer.create(this.activity, R.raw.votay);
         mediaPlayer.start();
     }
-    public void soundLose(){
-        mediaPlayer = MediaPlayer.create(this.activity,R.raw.tiengoh);
+
+    public void soundLose() {
+        mediaPlayer = MediaPlayer.create(this.activity, R.raw.tiengoh);
         mediaPlayer.start();
     }
+
+    public void showHistory() {
+        getBoard().setCell();
+        getBoard().checkCellWin();
+    }
+
     public void start() {
-        HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
-        horizontalScrollView.addView(board.getTableLayout());
         startTimer();
         if (opponent instanceof PlayerBot) {
             if (!goFirst)
@@ -67,18 +126,18 @@ public class Game {
         }
     }
 
-    public void show() {
-        HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
-        horizontalScrollView.addView(board.getTableLayout());
+    public void remake() {
+        if (!(activity instanceof GamePlayActivity))
+            return;
+        GamePlayActivity gamePlayActivity = (GamePlayActivity) (activity);
+        gamePlayActivity.removeBoardFromActivity();
+        gamePlayActivity.newGame(!goFirst, opponent);
+    }
 
-    }
-    public void remake(){
-        removeBoardFromActivity();
-        ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
-    }
-    public void undo(){
+    public void undo() {
         board.uncheckCell();
     }
+
     public void endGame(String result, boolean showDialog) {
         String resultToStore = "";
         String opponentToStore = "";
@@ -93,23 +152,19 @@ public class Game {
             if (result.equals("Bạn đã thắng.")) {
                 soundWin();
                 resultToStore = "Thắng";
-            }
-            else if (result.equals("Đối thủ đã thắng.")) {
+            } else if (result.equals("Đối thủ đã thắng.")) {
                 soundLose();
                 resultToStore = "Thua";
-            }
-            else if (result.equals("Hoà.")) {
+            } else if (result.equals("Hoà.")) {
                 resultToStore = "Hoà";
-            }
-            else {
+            } else {
                 resultToStore = "NONE";
             }
 
             // Lưu opponent
             if (opponent instanceof PlayerBot) {
                 opponentToStore = "BOT";
-            }
-            else {
+            } else {
                 opponentToStore = "PLAYER";
             }
 
@@ -121,15 +176,16 @@ public class Game {
             if (opponent instanceof PlayerBot) {
 
                 IFunction positiveFunc = () -> {
-                    removeBoardFromActivity();
-                    ((GamePlayActivity) (activity)).newGame(!goFirst, opponent);
+                    GamePlayActivity gamePlayActivity = (GamePlayActivity) (activity);
+                    gamePlayActivity.removeBoardFromActivity();
+                    gamePlayActivity.newGame(!goFirst, opponent);
                 };
 
                 IFunction negativeFunc = activity::finish;
 
                 Utilities.createDialog(result, "Bạn có muốn bắt đầu game mới không?",
                         "Đồng Ý", "Không", activity, positiveFunc, negativeFunc);
-                ((GamePlayActivity)(activity)).updatePoint(result);
+                ((GamePlayActivity) (activity)).updatePoint(result);
             } else {
                 IFunction negativeFunc = activity::finish;
                 Utilities.createDialog(result, "Bấm ok để thoát!",
@@ -138,14 +194,10 @@ public class Game {
             }
 
         } else {
-            removeBoardFromActivity();
+            GamePlayActivity gamePlayActivity = (GamePlayActivity) (activity);
+            gamePlayActivity.removeBoardFromActivity();
         }
 
-    }
-    
-    private void removeBoardFromActivity() {
-        HorizontalScrollView horizontalScrollView = activity.findViewById(R.id.horizontalSrcollView);
-        horizontalScrollView.removeView(board.getTableLayout());
     }
 
     public void setOpponent(Player opponent) {
@@ -180,7 +232,7 @@ public class Game {
         for (Direction direction : Direction.values()) {
             ++onSameAxis;
             point += getPointByDirection(anchor, direction, sideChecking, trackTable);
-            if (point >= WIN_NUMBERS )
+            if (point >= WIN_NUMBERS)
                 return true;
             // on the other axis, then reset point
             if (onSameAxis == 2) {
@@ -188,7 +240,7 @@ public class Game {
                 onSameAxis = 0;
             }
         }
-        Log.e("CHECK", String.valueOf(isRunning));
+
         return false;
     }
 
@@ -265,11 +317,11 @@ public class Game {
 
                 if (sumProgress >= maxValue) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    isRunning=false;
+                    isRunning = false;
                     if (isMyTurn()) {
-                        endGame("Đối thủ đã thắng.",true);
+                        endGame("Đối thủ đã thắng.", true);
                     } else {
-                        endGame("Bạn đã thắng.",true);
+                        endGame("Bạn đã thắng.", true);
                     }
                 }
             } catch (Exception e) {

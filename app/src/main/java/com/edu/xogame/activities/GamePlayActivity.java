@@ -1,25 +1,19 @@
 package com.edu.xogame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 
 import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.edu.xogame.Game;
 import com.edu.xogame.R;
 import com.edu.xogame.Utilities;
 import com.edu.xogame.players.Player;
@@ -27,13 +21,10 @@ import com.edu.xogame.players.PlayerBot;
 import com.edu.xogame.players.RealPlayer;
 import com.edu.xogame.views.Board;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.util.Objects;
 
 public class GamePlayActivity extends AppCompatActivity {
-    private Context context;
-    private Game game;
+    private GameFragment game;
     private Button btnNewGame;
     private Button btnUndo;
     private TextView tvP_Human;
@@ -57,9 +48,9 @@ public class GamePlayActivity extends AppCompatActivity {
             setContentView(R.layout.activity_show_history);
             boardGame = intent.getStringExtra("BoardGame");
             boardGame = boardGame.replace("[","").replace("]","");
-            String numbers[] = boardGame.split(", ");
+            String[] numbers = boardGame.split(", ");
 
-            int boardGameArray[][] = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
+            int[][] boardGameArray = new int[Board.NUMBER_ROWS][Board.NUMBER_COLUMNS];
 
             for (int i = 0; i < Board.NUMBER_ROWS; i++) {
                 for (int j = 0; j < Board.NUMBER_COLUMNS; j++) {
@@ -119,32 +110,33 @@ public class GamePlayActivity extends AppCompatActivity {
         if (game != null)
             game.endGame(null, false);
 
-        game = new Game(this, goFirst);
+        game = new GameFragment(goFirst, true);
+        getSupportFragmentManager().beginTransaction().replace(R.id.boardGame, game).commit();
         game.setOpponent(player);
         player.setBoard(game.getBoard());
-        game.start();
+
+    }
+
+    public void removeBoardFromActivity() {
+        getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.boardGame))).commit();
     }
 
     public void showGameHistory(int[][] boardGameArray) {
-        game = new Game(this, false);
+        if (game != null)
+            game.endGame(null, false);
+        game = new GameFragment(false, false);
         game.getBoard().setTrackTable(boardGameArray);
-        game.getBoard().setCell(this.getApplicationContext());
-        game.getBoard().checkCellWin();
-        game.show();
+        getSupportFragmentManager().beginTransaction().replace(R.id.boardGame, game).commit();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (game.getOpponent() instanceof PlayerBot)
-            game.isRunning = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (game.getOpponent() instanceof PlayerBot)
-            game.isRunning = true;
     }
 
     @Override
