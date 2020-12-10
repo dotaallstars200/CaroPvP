@@ -85,35 +85,16 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/board"
+    <FrameLayout
+        android:id="@+id/boardGame"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:layout_below="@+id/info"
-
-        >
-
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-
-            >
-
-            <HorizontalScrollView
-                android:id="@+id/horizontalSrcollView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </HorizontalScrollView>
-        </ScrollView>
-    </LinearLayout>
+        android:layout_height="451dp"
+        android:layout_below="@+id/info" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/Menu"
-        android:layout_below="@+id/board"
+        android:layout_below="@+id/boardGame"
 
         >
     <RelativeLayout
