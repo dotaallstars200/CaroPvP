@@ -138,7 +138,6 @@ public class Board  {
     }
     public void checkCellWin()
     {
-        Log.e("<<NUM_ORDER>>", num_order.toString());
         if (num_order.empty() || num_order.size() == 1)//Board empty
             return;
         Cell tempCell;
